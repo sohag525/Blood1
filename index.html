@@ -30,14 +30,21 @@
             display: flex;
             flex-direction: column;
         }
+        /* Adjusted cell widths for new column order and overflow prevention */
         .name-cell-truncate {
-            max-width: 70px; 
+            max-width: 80px; 
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .location-cell-style {
+            max-width: 75px; /* Adjusted */
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .contact-cell-style {
-            max-width: 90px; 
+            max-width: 85px; /* Adjusted */
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -48,12 +55,18 @@
         .contact-cell-style:hover {
             color: #1d4ed8;
         }
-        .location-cell-style {
-            max-width: 80px;
+        .group-cell-style { /* For blood group */
+            max-width: 50px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            text-align: center;
         }
+        .status-cell-style { /* For status dot */
+             max-width: 50px;
+             text-align: center;
+        }
+
         #toastMessage {
             position: fixed;
             bottom: 20px;
@@ -119,7 +132,7 @@
             overflow: hidden;
             border-radius: 0.5rem;
             margin-bottom: 1rem; 
-            background-color: #e5e7eb; /* Fallback background for slideshow area */
+            background-color: #e5e7eb;
         }
         .slide-item {
             position: absolute;
@@ -141,30 +154,28 @@
         .slide-item.active {
             opacity: 1;
         }
-        /* Updated styling for generic fallback */
         .slide-text-fallback {
             width: 100%;
             height: 100%;
             display: flex;
-            flex-direction: column; /* Stack icon and text */
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-color: #e5e7eb; /* Neutral gray */
-            color: #6b7280; /* Gray text */
+            background-color: #e5e7eb;
+            color: #6b7280;
             text-align: center;
             padding: 1rem;
         }
         .slide-text-fallback svg {
-            width: 48px; /* Larger icon */
+            width: 48px;
             height: 48px;
             margin-bottom: 0.5rem;
-            fill: #9ca3af; /* Lighter gray for icon */
+            fill: #9ca3af;
         }
         .slide-text-fallback p {
-            font-size: 0.875rem; /* Smaller text */
+            font-size: 0.875rem;
             font-weight: 500;
         }
-
         .header-icon {
             width: 28px;
             height: 28px;
@@ -277,13 +288,14 @@
             margin-bottom: 1rem;
         }
         #locationFilterSelect {
-            min-width: 120px; 
+            min-width: 130px; 
+            max-width: 150px; 
             padding: 0.3rem 0.5rem; 
             border-radius: 0.375rem;
             border: 1px solid #d1d5db; 
             background-color: white;
             font-size: 0.875rem;
-            margin-left: 0.5rem; 
+            /* Removed margin-left as label is removed */
         }
         .modal-overlay {
             position: fixed;
@@ -394,8 +406,8 @@
         <div id="homePage" class="page active">
             <div id="imageSlideshow"></div>
             <div class="flex-grow flex flex-col justify-start">
-                <h2 class="text-4xl font-bold text-gray-800 mb-2 text-left">Save Lives Today</h2>
-                <p class="text-gray-600 mb-4 text-left">Connect with blood donors or become one</p>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2 text-left whitespace-nowrap">আপনার রক্তে বাঁচুক প্রাণ</h2>
+                <p class="text-gray-600 mb-4 text-left">রক্তদাতা খুঁজুন অথবা রক্তদাতা হিসেবে যোগ দিন</p>
                 <button id="findDonorButton" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md mb-3 flex items-center justify-center text-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 mr-3"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
                     Find Donor
@@ -416,9 +428,9 @@
 
         <div id="resultsPage" class="page">
             <div class="flex items-center justify-between mb-4">
-                <h2 id="resultsTitle" class="text-xl font-semibold text-gray-700">Donors</h2>
-                <div id="locationFilterContainer" class="flex items-center">
-                    <select id="locationFilterSelect" name="locationFilter" class="p-1 border border-gray-300 rounded-md text-sm focus:ring-red-500 focus:border-red-500" aria-label="Filter by Location">
+                <h2 id="resultsTitle" class="text-xl font-semibold text-gray-700 flex-shrink-0 mr-3">Donors</h2>
+                <div id="locationFilterContainer" class="flex items-center"> 
+                    <select id="locationFilterSelect" name="locationFilter" class="border border-gray-300 rounded-md text-sm focus:ring-red-500 focus:border-red-500" aria-label="Filter by Location">
                         </select>
                 </div>
             </div>
@@ -433,10 +445,11 @@
                     <thead class="bg-red-500">
                         <tr>
                             <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Name</th>
+                            <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Location</th>
                             <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Contact</th>
-                            <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Group</th> 
+                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Group</th> 
                             <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Status</th> 
-                            <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Location</th> </tr>
+                        </tr>
                     </thead>
                     <tbody id="donorsTableBody" class="bg-white divide-y divide-gray-200"></tbody>
                 </table>
@@ -539,6 +552,7 @@
         let initialDataFetchFailed = false;
         let currentSelectedBloodGroup = null;
         let currentContactForModal = null; 
+        let isHandlingPopState = false; // Flag for history management
         
         // --- DOM ELEMENT REFERENCES ---
         const pages = { /* ... */ };
@@ -607,19 +621,47 @@
                 }
             }
         }
-        function showPage(pageId) {
+        
+        // --- PAGE NAVIGATION & HISTORY MANAGEMENT ---
+        function showPage(pageId, isBackNav = false) {
+            const previousPageId = currentPageId;
             currentPageId = pageId;
             Object.values(pages).forEach(page => page.classList.remove('active'));
             if (pages[pageId]) pages[pageId].classList.add('active');
-            updateHeaderIcons();
-            if (pageId === 'home') startSlideshow();
-            else stopSlideshow();
+            updateHeaderIcons(); // Update header based on the new page
+
+            if (pageId === 'home') {
+                startSlideshow();
+            } else {
+                stopSlideshow();
+            }
+
+            // Manage browser history for physical back button
+            if (!isBackNav && (history.state?.pageId !== pageId || !history.state?.appState)) {
+                 // Only push if it's a new page state, not a popstate event or same page
+                history.pushState({ pageId: pageId, appState: true }, '', `#${pageId}`);
+            }
         }
+
+        window.addEventListener('popstate', (event) => {
+            if (event.state && event.state.appState && event.state.pageId) {
+                isHandlingPopState = true; // Prevent showPage from re-pushing history
+                showPage(event.state.pageId, true); // Pass true for isBackNav
+                isHandlingPopState = false;
+            } else if (!event.state && currentPageId !== 'home') {
+                // If state is null (e.g., initial page or external navigation) and not on home, go to home
+                isHandlingPopState = true;
+                showPage('home', true);
+                history.replaceState({ pageId: 'home', appState: true }, '', '#home'); // Ensure home has a state
+                isHandlingPopState = false;
+            }
+            // If event.state is null and we are on 'home', default browser/app behavior (e.g., exit)
+        });
+
+
         function createTextFallbackSlide(slideData) {
             const fallbackDiv = document.createElement('div');
             fallbackDiv.className = 'slide-text-fallback';
-            
-            // SVG Icon for image placeholder
             const svgIcon = `
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M16 2H8C4.691 2 2 4.691 2 8v8c0 3.309 2.691 6 6 6h8c3.309 0 6-2.691 6-6V8c0-3.309-2.691-6-6-6zm4 14c0 2.206-1.794 4-4 4H8c-2.206 0-4-1.794-4-4V8c0-2.206 1.794-4 4-4h8c2.206 0 4 1.794 4 4v8z"></path>
@@ -627,8 +669,7 @@
                 </svg>
             `;
             const textElement = document.createElement('p');
-            textElement.textContent = "ছবি উপলব্ধ নেই"; // Bangla: Image not available
-
+            textElement.textContent = "ছবি উপলব্ধ নেই"; 
             fallbackDiv.innerHTML = svgIcon;
             fallbackDiv.appendChild(textElement);
             return fallbackDiv;
@@ -648,11 +689,11 @@
                     img.onerror = function() {
                         console.warn(`Slideshow image failed to load: ${imageUrlWithCacheBust}. Showing text fallback.`);
                         slideItemContainer.innerHTML = ''; 
-                        slideItemContainer.appendChild(createTextFallbackSlide(slideData)); // Pass slideData for alt text if needed by fallback
+                        slideItemContainer.appendChild(createTextFallbackSlide(slideData)); 
                     };
                     slideItemContainer.appendChild(img);
                 } else {
-                    slideItemContainer.appendChild(createTextFallbackSlide(slideData)); // Pass slideData
+                    slideItemContainer.appendChild(createTextFallbackSlide(slideData)); 
                 }
                 slideshowContainer.appendChild(slideItemContainer);
             });
@@ -670,7 +711,7 @@
             if (slideshowImageSources.length > 0) { 
                  initSlideshow(); 
                  if (slideshowImageSources.length > 1) {
-                    slideshowInterval = setInterval(nextSlide, 3000);
+                    slideshowInterval = setInterval(nextSlide, 5000); 
                  }
             }
         }
@@ -959,9 +1000,14 @@
                     const row = donorsTableBody.insertRow();
                     row.className = 'hover:bg-red-50 transition-colors';
 
+                    // New Column Order: Name, Location, Contact, Group, Status
                     const nameCell = row.insertCell();
                     nameCell.textContent = donor.name;
                     nameCell.className = 'px-2 py-3 text-sm name-cell-truncate text-gray-700';
+
+                    const locationCell = row.insertCell();
+                    locationCell.textContent = donor.location || 'N/A';
+                    locationCell.className = 'px-2 py-3 text-sm location-cell-style text-gray-600';
 
                     const contactCell = row.insertCell();
                     const displayContact = donor.contact && !donor.contact.startsWith('0') && /^\d{10}$/.test(donor.contact) ? '0' + donor.contact : donor.contact;
@@ -977,10 +1023,10 @@
                     
                     const bloodGroupCell = row.insertCell();
                     bloodGroupCell.innerHTML = `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">${donor.bloodGroup}</span>`;
-                    bloodGroupCell.className = 'px-2 py-3 whitespace-nowrap text-sm';
+                    bloodGroupCell.className = 'px-2 py-3 whitespace-nowrap text-sm group-cell-style';
 
                     const statusCell = row.insertCell();
-                    statusCell.className = 'px-2 py-3 whitespace-nowrap text-sm text-center';
+                    statusCell.className = 'px-2 py-3 whitespace-nowrap text-sm status-cell-style';
                     const statusDot = document.createElement('span');
                     statusDot.className = 'status-dot';
                     
@@ -992,10 +1038,6 @@
                         statusDot.title = 'সম্প্রতি রক্ত দিয়েছেন'; 
                     }
                     statusCell.appendChild(statusDot);
-
-                    const locationCell = row.insertCell();
-                    locationCell.textContent = donor.location || 'N/A';
-                    locationCell.className = 'px-2 py-3 text-sm location-cell-style text-gray-600';
                 });
             }
             loadingSpinnerResults.style.display = 'none';
@@ -1070,10 +1112,10 @@
         });
         headerBackButton.addEventListener('click', (e) => {
             animateAndAct(e.currentTarget, () => {
-                if (currentPageId === 'selectBloodGroup' || currentPageId === 'faq') {
+                if (history.state && history.state.appState) { 
+                    history.back(); 
+                } else {
                     showPage('home');
-                } else if (currentPageId === 'results') {
-                    showPage('selectBloodGroup');
                 }
             });
         });
@@ -1145,6 +1187,8 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             initializeFaqAccordion();
+            history.replaceState({ pageId: 'home', appState: true }, '', '#home');
+
             initialBackgroundFetch().then(() => {
                 if (currentPageId === 'results' || allDonors.length > 0) {
                      populateLocationFilter();
@@ -1155,3 +1199,4 @@
     </script>
 </body>
 </html>
+
