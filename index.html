@@ -30,7 +30,6 @@
             display: flex;
             flex-direction: column;
         }
-        /* Adjusted cell widths for new column order and overflow prevention */
         .name-cell-truncate {
             max-width: 80px; 
             white-space: nowrap;
@@ -38,31 +37,42 @@
             text-overflow: ellipsis;
         }
         .location-cell-style {
-            max-width: 75px; /* Adjusted */
+            max-width: 75px; 
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        .contact-cell-style {
-            max-width: 85px; /* Adjusted */
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .contact-cell-clickable { /* For the TD containing the icon */
             cursor: pointer; 
-            color: #2563eb; 
-            text-decoration: underline;
+            text-align: center; 
         }
-        .contact-cell-style:hover {
-            color: #1d4ed8;
+        .table-contact-icon-wrapper { /* For the div wrapping the SVG icon */
+            width: 32px; 
+            height: 32px;
+            border-radius: 50%;
+            background-color: #25D366; /* Green background */
+            display: inline-flex; 
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
         }
-        .group-cell-style { /* For blood group */
+        .table-contact-icon-wrapper:hover {
+            background-color: #1DAE50; /* Darker green on hover */
+        }
+        .table-contact-icon-svg { /* For the SVG icon itself */
+            width: 16px; 
+            height: 16px;
+            fill: white; /* White phone icon */
+        }
+      
+        .group-cell-style { 
             max-width: 50px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             text-align: center;
         }
-        .status-cell-style { /* For status dot */
+        .status-cell-style { 
              max-width: 50px;
              text-align: center;
         }
@@ -295,7 +305,6 @@
             border: 1px solid #d1d5db; 
             background-color: white;
             font-size: 0.875rem;
-            /* Removed margin-left as label is removed */
         }
         .modal-overlay {
             position: fixed;
@@ -446,7 +455,7 @@
                         <tr>
                             <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Name</th>
                             <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Location</th>
-                            <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Contact</th>
+                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Contact</th> 
                             <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Group</th> 
                             <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Status</th> 
                         </tr>
@@ -1011,15 +1020,19 @@
 
                     const contactCell = row.insertCell();
                     const displayContact = donor.contact && !donor.contact.startsWith('0') && /^\d{10}$/.test(donor.contact) ? '0' + donor.contact : donor.contact;
-                    contactCell.textContent = displayContact;
-                    contactCell.className = 'px-2 py-3 text-sm contact-cell-style text-gray-500';
-                    contactCell.title = `Click for options for ${displayContact}`;
-                    contactCell.addEventListener('click', (e) => {
+                    
+                    const contactIconDiv = document.createElement('div');
+                    contactIconDiv.className = 'table-contact-icon-wrapper'; 
+                    contactIconDiv.innerHTML = `<svg class="table-contact-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>`;
+                    contactIconDiv.title = `Contact options for ${displayContact}`; 
+                    contactIconDiv.addEventListener('click', (e) => {
                         e.preventDefault(); 
                         animateAndAct(e.currentTarget, () => {
                             showContactActionModal(displayContact);
                         });
                     });
+                    contactCell.className = 'px-2 py-3 text-sm contact-cell-clickable'; 
+                    contactCell.appendChild(contactIconDiv);
                     
                     const bloodGroupCell = row.insertCell();
                     bloodGroupCell.innerHTML = `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">${donor.bloodGroup}</span>`;
@@ -1199,4 +1212,3 @@
     </script>
 </body>
 </html>
-
