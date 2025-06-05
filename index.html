@@ -5,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blood Donor App</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter and Hind Siliguri -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Hind Siliguri', 'Inter', sans-serif; /* Prioritize Hind Siliguri for Bangla */
             background-color: #f0f2f5;
         }
         .app-container {
@@ -23,57 +27,64 @@
         .page {
             display: none;
             flex-grow: 1;
-            padding: 1.5rem;
+            padding: 1rem; 
             overflow-y: auto;
         }
         .page.active {
             display: flex;
             flex-direction: column;
         }
+        
         .name-cell-truncate {
-            max-width: 80px; 
+            max-width: 100px; 
+            min-width: 80px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .location-cell-style {
-            max-width: 75px; 
+            max-width: 90px; 
+            min-width: 70px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        .contact-cell-clickable { /* For the TD containing the icon */
+        .contact-cell-clickable { 
             cursor: pointer; 
             text-align: center; 
+            max-width: 40px; 
+            min-width: 40px;
         }
-        .table-contact-icon-wrapper { /* For the div wrapping the SVG icon */
-            width: 32px; 
-            height: 32px;
+        .table-contact-icon-wrapper { 
+            width: 28px; 
+            height: 28px;
             border-radius: 50%;
-            background-color: #25D366; /* Green background */
+            background-color: #25D366; 
             display: inline-flex; 
             align-items: center;
             justify-content: center;
             transition: background-color 0.2s;
         }
         .table-contact-icon-wrapper:hover {
-            background-color: #1DAE50; /* Darker green on hover */
+            background-color: #1DAE50; 
         }
-        .table-contact-icon-svg { /* For the SVG icon itself */
-            width: 16px; 
-            height: 16px;
-            fill: white; /* White phone icon */
+        .table-contact-icon-svg { 
+            width: 12px; 
+            height: 12px;
+            fill: white; 
         }
       
         .group-cell-style { 
-            max-width: 50px;
+            max-width: 40px; 
+            min-width: 35px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             text-align: center;
         }
         .status-cell-style { 
-             max-width: 50px;
+             max-width: 40px; 
+             min-width: 35px;
              text-align: center;
         }
 
@@ -195,20 +206,29 @@
              color: #dc2626;
         }
         .status-dot {
-            width: 12px;
-            height: 12px;
+            width: 10px; 
+            height: 10px;
             border-radius: 50%;
             display: inline-block;
             vertical-align: middle;
         }
+        #statusLegend { 
+            display: flex;
+            justify-content: space-around; 
+            align-items: center;
+            margin-bottom: 1rem; 
+            font-size: 0.8rem;
+            padding: 0.5rem;
+            background-color: #f9fafb; 
+            border-radius: 0.5rem;
+        }
         #statusLegend p {
             display: flex;
             align-items: center;
-            margin-bottom: 0.25rem;
             color: #4B5563;
         }
         #statusLegend .status-dot {
-            margin-right: 8px;
+            margin-right: 6px; 
         }
         @keyframes button-click-animation {
             0% { transform: scale(1); }
@@ -297,14 +317,26 @@
             font-size: 0.875rem;
             margin-bottom: 1rem;
         }
-        #locationFilterSelect {
-            min-width: 130px; 
-            max-width: 150px; 
-            padding: 0.3rem 0.5rem; 
-            border-radius: 0.375rem;
+        #locationFilterSelect { 
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem; 
             border: 1px solid #d1d5db; 
             background-color: white;
-            font-size: 0.875rem;
+            font-size: 0.9rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            width: 100%; 
+            background-image: url('https://raw.githubusercontent.com/sohag525/Blood1/main/location.png'); 
+            background-repeat: no-repeat;
+            background-position: 0.75rem center; 
+            background-size: 16px 16px; 
+            padding-left: 2.5rem; 
+            /* appearance: none; /* Uncomment if you want to hide default arrow and use a custom one */
+        }
+        #locationFilterSelect.no-icon { 
+            background-image: none;
+            padding-left: 0.75rem;
         }
         .modal-overlay {
             position: fixed;
@@ -331,14 +363,19 @@
             border-radius: 0.5rem;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             width: 90%;
-            max-width: 320px; 
+            max-width: 360px; 
             text-align: center; 
         }
         .modal-content h3 {
-            font-size: 1.125rem; 
+            font-size: 1.25rem; 
             font-weight: 600;
             color: #1f2937;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .modal-content p {
+            font-size: 1rem;
+            color: #374151;
+            margin-bottom: 0.25rem; 
         }
         .modal-content p#contactActionNumber { 
             font-size: 1.25rem; 
@@ -351,6 +388,7 @@
             display: flex;
             flex-direction: column; 
             gap: 0.75rem; 
+            margin-top: 1.5rem;
         }
         .modal-button {
             padding: 0.75rem 1rem; 
@@ -380,11 +418,130 @@
          .modal-button-tertiary { 
             background-color: #e5e7eb; 
             color: #374151;
-            margin-top: 0.5rem; 
         }
         .modal-button-tertiary:hover {
             background-color: #d1d5db;
         }
+        #developerModalImage {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1rem auto;
+            border: 3px solid #ef4444; 
+        }
+        .developer-social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem; 
+            margin-top: 1rem;
+            margin-bottom: 1.5rem; 
+        }
+        .developer-social-links a {
+            display: inline-block;
+        }
+        .developer-social-links img { 
+            width: 32px; 
+            height: 32px;
+            transition: transform 0.2s ease-in-out;
+        }
+        .developer-social-links a:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Donor Card Styles */
+        .donor-card {
+            background-color: white;
+            border-radius: 0.75rem; 
+            padding: 1rem; 
+            margin-bottom: 1rem; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        .donor-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; 
+            margin-bottom: 0.5rem; 
+        }
+        .donor-name {
+            font-size: 1.125rem; 
+            font-weight: 600;
+            color: #1f2937; 
+        }
+        .donor-blood-group {
+            font-size: 0.875rem; 
+            font-weight: 500;
+            padding: 0.125rem 0.5rem; 
+            border-radius: 9999px; 
+        }
+        .donor-blood-group.available {
+            color: #059669; 
+            background-color: #d1fae5; 
+        }
+        .donor-blood-group.unavailable {
+            color: #ef4444; 
+            background-color: #fee2e2; 
+        }
+        .donor-details p {
+            font-size: 0.875rem; 
+            color: #4b5563; 
+            margin-bottom: 0.25rem; 
+            display: flex;
+            align-items: center;
+        }
+        .donor-details img.location-icon { 
+            width: 14px;
+            height: 14px;
+            margin-right: 0.375rem; 
+        }
+        .contact-donor-button {
+            width: 100%;
+            padding: 0.75rem; 
+            border-radius: 0.5rem; 
+            font-weight: 500;
+            color: white;
+            margin-top: 0.75rem; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .contact-donor-button.available {
+            background-color: #10b981; 
+        }
+        .contact-donor-button.available:hover {
+            background-color: #059669; 
+        }
+        .contact-donor-button.unavailable {
+            background-color: #ef4444; 
+        }
+        .contact-donor-button.unavailable:hover {
+            background-color: #dc2626; 
+        }
+        .contact-donor-button img { 
+            width: 18px;
+            height: 18px;
+        }
+        
+        /* Donor Count Stats */
+        .donor-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: #4b5563;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background-color: #f9fafb; 
+            border-radius: 0.5rem;
+        }
+        .donor-stats svg {
+            width: 16px;
+            height: 16px;
+            margin-right: 0.25rem;
+            fill: currentColor;
+        }
+
     </style>
 </head>
 <body>
@@ -404,9 +561,9 @@
             </div>
             <h1 id="headerTitle" class="text-xl font-semibold text-gray-800 text-center flex-grow">Blood Donor</h1>
             <div class="w-10 flex items-center justify-end">
-                <button id="profileButton" aria-label="Profile">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="header-icon text-red-600">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                <button id="developerInfoButton" aria-label="Developer Info">
+                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="header-icon text-red-600">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
                     </svg>
                 </button>
             </div>
@@ -415,8 +572,8 @@
         <div id="homePage" class="page active">
             <div id="imageSlideshow"></div>
             <div class="flex-grow flex flex-col justify-start">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2 text-left whitespace-nowrap">আপনার রক্তে বাঁচুক প্রাণ</h2>
-                <p class="text-gray-600 mb-4 text-left">রক্তদাতা খুঁজুন অথবা রক্তদাতা হিসেবে যোগ দিন</p>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2 text-center whitespace-nowrap">আপনার রক্তে বাঁচুক প্রাণ</h2>
+                <p class="text-gray-600 mb-4 text-center">রক্তদাতা খুঁজুন অথবা রক্তদাতা হিসেবে যোগ দিন</p>
                 <button id="findDonorButton" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md mb-3 flex items-center justify-center text-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 mr-3"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
                     Find Donor
@@ -436,12 +593,21 @@
         </div>
 
         <div id="resultsPage" class="page">
-            <div class="flex items-center justify-between mb-4">
-                <h2 id="resultsTitle" class="text-xl font-semibold text-gray-700 flex-shrink-0 mr-3">Donors</h2>
-                <div id="locationFilterContainer" class="flex items-center"> 
-                    <select id="locationFilterSelect" name="locationFilter" class="border border-gray-300 rounded-md text-sm focus:ring-red-500 focus:border-red-500" aria-label="Filter by Location">
-                        </select>
-                </div>
+            <div class="mb-4"> 
+                <select id="locationFilterSelect" name="locationFilter" aria-label="এলাকা অনুযায়ী ফিল্টার করুন">
+                     <!-- Options will be populated by JavaScript -->
+                </select>
+            </div>
+            
+            <div id="donorStats" class="donor-stats">
+                <span id="totalDonorsStat" class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 mr-1"><path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" /></svg>
+                    মোট রক্তদাতা: <span id="totalDonorsCount">0</span>
+                </span>
+                <span id="availableDonorsStat" class="flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 mr-1 text-green-500"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                    উপলব্ধ: <span id="availableDonorsCount">0</span>
+                </span>
             </div>
             
             <div id="statusLegend" class="mb-4 text-sm text-gray-700">
@@ -449,19 +615,8 @@
                 <p><span class="status-dot" style="background-color: #EF4444;"></span>সম্প্রতি রক্ত দিয়েছেন</p>
             </div>
             <div id="loadingSpinnerResults"></div>
-            <div id="resultsTableContainer" class="overflow-x-auto bg-white rounded-lg shadow">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-red-500">
-                        <tr>
-                            <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Name</th>
-                            <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Location</th>
-                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Contact</th> 
-                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Group</th> 
-                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Status</th> 
-                        </tr>
-                    </thead>
-                    <tbody id="donorsTableBody" class="bg-white divide-y divide-gray-200"></tbody>
-                </table>
+            <div id="donorsListContainer"> 
+                <!-- Donor cards will be generated here -->
             </div>
             <p id="noResultsMessage" class="mt-4 text-center text-gray-600 hidden"></p>
             <p id="errorMessageResults" class="mt-4 text-center text-red-600 hidden"></p>
@@ -524,6 +679,7 @@
         </svg>
     </button>
 
+    <!-- Contact Action Modal -->
     <div id="contactActionModal" class="modal-overlay">
         <div class="modal-content">
             <h3>যোগাযোগ করুন</h3>
@@ -538,6 +694,28 @@
                     কপি করুন
                 </button>
                 <button id="contactActionCloseButton" class="modal-button modal-button-tertiary">বন্ধ করুন</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Developer Info Modal -->
+    <div id="developerInfoModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>About Developer</h3>
+            <img id="developerModalImage" src="images/developer.jpg" alt="Developer Photo" 
+                 onerror="this.onerror=null; this.src='https://placehold.co/100x100/cccccc/ffffff?text=Photo'; this.alt='Developer photo not available'">
+            <p id="developerName" class="font-semibold text-lg mb-1">Md Shahriya Hasan Sohag</p> 
+            <p id="developerTitle" class="text-gray-600">Graphics Designer</p>
+            <div class="developer-social-links">
+                <a href="https://wa.link/mnyy7m" target="_blank" aria-label="WhatsApp">
+                    <img src="images/whatsapp.png" alt="WhatsApp" title="WhatsApp">
+                </a>
+                <a href="https://www.facebook.com/shahriyahasan5066/" target="_blank" aria-label="Facebook">
+                    <img src="images/facebook.png" alt="Facebook" title="Facebook">
+                </a>
+            </div>
+            <div class="modal-actions">
+                <button id="developerInfoCloseButton" class="modal-button modal-button-tertiary">বন্ধ করুন</button>
             </div>
         </div>
     </div>
@@ -561,7 +739,8 @@
         let initialDataFetchFailed = false;
         let currentSelectedBloodGroup = null;
         let currentContactForModal = null; 
-        let isHandlingPopState = false; // Flag for history management
+        let isHandlingPopState = false; 
+        // let currentStatusFilter = 'all'; // Status filter removed
         
         // --- DOM ELEMENT REFERENCES ---
         const pages = { /* ... */ };
@@ -570,10 +749,10 @@
         const floatingFaqButton = document.getElementById('floatingFaqButton');
         const hamburgerButton = document.getElementById('hamburgerButton'); 
         const headerBackButton = document.getElementById('headerBackButton');
-        const profileButton = document.getElementById('profileButton');
+        const developerInfoButton = document.getElementById('developerInfoButton'); 
         const headerTitle = document.getElementById('headerTitle');
         const bloodGroupCardsContainer = document.getElementById('bloodGroupCardsContainer');
-        const donorsTableBody = document.getElementById('donorsTableBody');
+        const donorsListContainer = document.getElementById('donorsListContainer'); 
         const resultsTitle = document.getElementById('resultsTitle'); 
         const slideshowContainer = document.getElementById('imageSlideshow');
         const slideshowImageSources = [ /* ... */ ];
@@ -592,14 +771,23 @@
         const contactActionCallButton = document.getElementById('contactActionCallButton');
         const contactActionCopyButton = document.getElementById('contactActionCopyButton');
         const contactActionCloseButton = document.getElementById('contactActionCloseButton');
+        const developerInfoModal = document.getElementById('developerInfoModal');
+        const developerInfoCloseButton = document.getElementById('developerInfoCloseButton');
+        // Status filter buttons removed from DOM refs
+        // const filterAllButton = document.getElementById('filterAll');
+        // const filterAvailableButton = document.getElementById('filterAvailable');
+        // const filterUnavailableButton = document.getElementById('filterUnavailable');
+        const totalDonorsCountEl = document.getElementById('totalDonorsCount');
+        const availableDonorsCountEl = document.getElementById('availableDonorsCount');
+
 
         pages.home = document.getElementById('homePage');
         pages.selectBloodGroup = document.getElementById('selectBloodGroupPage');
         pages.results = document.getElementById('resultsPage');
         pages.faq = document.getElementById('faqPage');
-        slideshowImageSources[0] = { url: 'https://raw.githubusercontent.com/sohag525/Blood1/main/image3.jpg', text: 'You Could Save a Life', color: '#ef4444' };
-        slideshowImageSources[1] = { url: 'https://raw.githubusercontent.com/sohag525/Blood1/main/image2.jpg', text: 'Donate Blood Today', color: '#3b82f6' };
-        slideshowImageSources[2] = { url: 'https://raw.githubusercontent.com/sohag525/Blood1/main/image1.jpg', text: 'Be Someone\'s Hero', color: '#10b981' };
+        slideshowImageSources[0] = { url: 'images/image3.jpg', text: 'You Could Save a Life', color: '#ef4444' }; 
+        slideshowImageSources[1] = { url: 'images/image2.jpg', text: 'Donate Blood Today', color: '#3b82f6' }; 
+        slideshowImageSources[2] = { url: 'images/image1.jpg', text: 'Be Someone\'s Hero', color: '#10b981' }; 
 
         function animateAndAct(element, callback) {
             if (element) {
@@ -616,17 +804,20 @@
             if (currentPageId === 'home') {
                 hamburgerButton.classList.remove('hidden');
                 headerBackButton.classList.add('hidden');
-                headerTitle.textContent = 'Blood Donor';
+                if(headerTitle) headerTitle.textContent = 'Blood Donor';
             } else {
                 hamburgerButton.classList.add('hidden');
                 headerBackButton.classList.remove('hidden');
-                if (currentPageId === 'faq') {
-                    headerTitle.textContent = 'সাধারণ জিজ্ঞাসা';
-                } else if (currentPageId === 'selectBloodGroup') {
-                     headerTitle.textContent = 'Blood Group';
-                } else if (currentPageId === 'results') {
-                } else {
-                    headerTitle.textContent = 'Blood Donor';
+                if (headerTitle) {
+                    if (currentPageId === 'faq') {
+                        headerTitle.textContent = 'সাধারণ জিজ্ঞাসা';
+                    } else if (currentPageId === 'selectBloodGroup') {
+                         headerTitle.textContent = 'Blood Group';
+                    } else if (currentPageId === 'results') {
+                         headerTitle.textContent = `রক্তদাতা তালিকা (${currentSelectedBloodGroup || ''})`; 
+                    } else {
+                        headerTitle.textContent = 'Blood Donor';
+                    }
                 }
             }
         }
@@ -637,7 +828,7 @@
             currentPageId = pageId;
             Object.values(pages).forEach(page => page.classList.remove('active'));
             if (pages[pageId]) pages[pageId].classList.add('active');
-            updateHeaderIcons(); // Update header based on the new page
+            updateHeaderIcons(); 
 
             if (pageId === 'home') {
                 startSlideshow();
@@ -645,26 +836,22 @@
                 stopSlideshow();
             }
 
-            // Manage browser history for physical back button
             if (!isBackNav && (history.state?.pageId !== pageId || !history.state?.appState)) {
-                 // Only push if it's a new page state, not a popstate event or same page
                 history.pushState({ pageId: pageId, appState: true }, '', `#${pageId}`);
             }
         }
 
         window.addEventListener('popstate', (event) => {
             if (event.state && event.state.appState && event.state.pageId) {
-                isHandlingPopState = true; // Prevent showPage from re-pushing history
-                showPage(event.state.pageId, true); // Pass true for isBackNav
+                isHandlingPopState = true; 
+                showPage(event.state.pageId, true); 
                 isHandlingPopState = false;
             } else if (!event.state && currentPageId !== 'home') {
-                // If state is null (e.g., initial page or external navigation) and not on home, go to home
                 isHandlingPopState = true;
                 showPage('home', true);
-                history.replaceState({ pageId: 'home', appState: true }, '', '#home'); // Ensure home has a state
+                history.replaceState({ pageId: 'home', appState: true }, '', '#home'); 
                 isHandlingPopState = false;
             }
-            // If event.state is null and we are on 'home', default browser/app behavior (e.g., exit)
         });
 
 
@@ -690,20 +877,17 @@
                 const slideItemContainer = document.createElement('div');
                 slideItemContainer.className = 'slide-item';
                 if (index === 0) slideItemContainer.classList.add('active');
-                if (navigator.onLine) {
-                    const img = document.createElement('img');
-                    const imageUrlWithCacheBust = `${slideData.url}?t=${new Date().getTime()}`;
-                    img.src = imageUrlWithCacheBust;
-                    img.alt = slideData.text; 
-                    img.onerror = function() {
-                        console.warn(`Slideshow image failed to load: ${imageUrlWithCacheBust}. Showing text fallback.`);
-                        slideItemContainer.innerHTML = ''; 
-                        slideItemContainer.appendChild(createTextFallbackSlide(slideData)); 
-                    };
-                    slideItemContainer.appendChild(img);
-                } else {
+                // Always try to load local image paths now
+                const img = document.createElement('img');
+                const imageUrlWithCacheBust = `${slideData.url}?t=${new Date().getTime()}`; // Still useful for potential browser caching of local files if paths change
+                img.src = imageUrlWithCacheBust;
+                img.alt = slideData.text; 
+                img.onerror = function() {
+                    console.warn(`Slideshow image failed to load: ${imageUrlWithCacheBust}. Showing text fallback.`);
+                    slideItemContainer.innerHTML = ''; 
                     slideItemContainer.appendChild(createTextFallbackSlide(slideData)); 
-                }
+                };
+                slideItemContainer.appendChild(img);
                 slideshowContainer.appendChild(slideItemContainer);
             });
         }
@@ -896,8 +1080,10 @@
             locationFilterSelect.innerHTML = ''; 
             const allLocationsOption = document.createElement('option');
             allLocationsOption.value = 'all';
-            allLocationsOption.textContent = 'All Locations';
+            // Use textContent for the option, the icon is handled by CSS background-image
+            allLocationsOption.textContent = ' সকল এলাকা'; 
             locationFilterSelect.appendChild(allLocationsOption);
+            
             if (allDonors && allDonors.length > 0) {
                 const uniqueLocations = [...new Set(allDonors.map(donor => donor.location).filter(loc => loc && loc !== "N/A"))].sort();
                 uniqueLocations.forEach(location => {
@@ -910,12 +1096,14 @@
         }
         function handleBloodGroupCardClick(bloodGroup) {
             currentSelectedBloodGroup = bloodGroup; 
-            headerTitle.textContent = `Donors (${bloodGroup})`;
-            resultsTitle.textContent = `Donors (${bloodGroup})`; 
+            if(headerTitle) headerTitle.textContent = `রক্তদাতা তালিকা (${bloodGroup})`; 
+            // if(resultsTitle) resultsTitle.textContent = `Donors (${bloodGroup})`; // Title is now in header
             populateLocationFilter(); 
-            locationFilterSelect.value = 'all'; 
+            if(locationFilterSelect) locationFilterSelect.value = 'all'; 
+            // currentStatusFilter = 'all'; // Status filter removed
+            // updateStatusFilterButtons(); // Status filter buttons removed
             showPage('results');
-            displayDonorsForGroup(bloodGroup, 'all'); 
+            displayDonorsForGroup(bloodGroup, 'all'); // Pass only blood group and location
         }
         function isDonorAvailable(lastDonatedDateStr) {
             if (!lastDonatedDateStr) {
@@ -950,37 +1138,53 @@
 
         function showContactActionModal(contactNumber) {
             currentContactForModal = contactNumber;
-            contactActionNumber.textContent = contactNumber;
-            contactActionModal.classList.add('active');
+            if(contactActionNumber) contactActionNumber.textContent = contactNumber;
+            if(contactActionModal) contactActionModal.classList.add('active');
         }
 
         function hideContactActionModal() {
-            contactActionModal.classList.remove('active');
+            if(contactActionModal) contactActionModal.classList.remove('active');
             currentContactForModal = null;
         }
+        
+        function showDeveloperInfoModal() {
+            if(developerInfoModal) developerInfoModal.classList.add('active');
+        }
+
+        function hideDeveloperInfoModal() {
+            if(developerInfoModal) developerInfoModal.classList.remove('active');
+        }
+
+        // function updateStatusFilterButtons() { // This function is no longer needed
+        // }
 
 
-        function displayDonorsForGroup(selectedGroup, selectedLocation = 'all') {
-            loadingSpinnerResults.style.display = 'block';
-            donorsTableBody.innerHTML = '';
-            noResultsMessage.classList.add('hidden'); 
-            errorMessageResults.classList.add('hidden'); 
+        function displayDonorsForGroup(selectedGroup, selectedLocation = 'all') { // Removed statusFilter parameter
+            if(loadingSpinnerResults) loadingSpinnerResults.style.display = 'block';
+            if(donorsListContainer) donorsListContainer.innerHTML = ''; 
+            if(noResultsMessage) noResultsMessage.classList.add('hidden'); 
+            if(errorMessageResults) errorMessageResults.classList.add('hidden'); 
             
-            const existingOfflineMsg = pages.results.querySelector('.offline-data-message');
-            if (existingOfflineMsg) existingOfflineMsg.remove();
+            const resultsPageElement = document.getElementById('resultsPage');
+            if (resultsPageElement) {
+                const existingOfflineMsg = resultsPageElement.querySelector('.offline-data-message');
+                if (existingOfflineMsg) existingOfflineMsg.remove();
+            }
+
 
             if (!navigator.onLine && localStorage.getItem(LOCAL_STORAGE_KEY)) {
                 showOfflineDataMessage('resultsPage');
             }
 
             if (initialDataFetchFailed && allDonors.length === 0) {
-                errorMessageResults.textContent = "Failed to load donor data. Please check your connection.";
-                errorMessageResults.classList.remove('hidden');
-                resultsTableContainer.classList.add('hidden'); 
-                loadingSpinnerResults.style.display = 'none';
+                if(errorMessageResults) {
+                    errorMessageResults.textContent = "Failed to load donor data. Please check your connection.";
+                    errorMessageResults.classList.remove('hidden');
+                }
+                if(donorsListContainer) donorsListContainer.innerHTML = ''; 
+                if(loadingSpinnerResults) loadingSpinnerResults.style.display = 'none';
                 return;
             }
-            resultsTableContainer.classList.remove('hidden'); 
 
             let filteredByBloodGroup = allDonors.filter(donor => donor.bloodGroup === selectedGroup);
             
@@ -993,6 +1197,12 @@
                 donor.isAvailable = isDonorAvailable(donor.lastDonatedDate);
             });
 
+            // Status filter logic removed from here
+
+            if(totalDonorsCountEl) totalDonorsCountEl.textContent = finalFilteredDonors.length; 
+            if(availableDonorsCountEl) availableDonorsCountEl.textContent = finalFilteredDonors.filter(d => d.isAvailable).length;
+
+
             finalFilteredDonors.sort((a, b) => {
                 if (a.isAvailable !== b.isAvailable) {
                     return a.isAvailable ? -1 : 1; 
@@ -1001,59 +1211,47 @@
             });
 
             if (finalFilteredDonors.length === 0) {
-                noResultsMessage.textContent = `No donors found for ${selectedGroup} in ${selectedLocation === 'all' ? 'any location' : selectedLocation}.`;
-                noResultsMessage.classList.remove('hidden');
-                donorsTableBody.innerHTML = `<tr><td colspan="5" class="px-4 py-4 text-center italic text-gray-500">No donors found.</td></tr>`;
+                if(noResultsMessage) {
+                    noResultsMessage.textContent = `No donors found for ${selectedGroup} in ${selectedLocation === 'all' ? 'any location' : selectedLocation}.`;
+                    noResultsMessage.classList.remove('hidden');
+                }
             } else {
                 finalFilteredDonors.forEach(donor => {
-                    const row = donorsTableBody.insertRow();
-                    row.className = 'hover:bg-red-50 transition-colors';
+                    const card = document.createElement('div');
+                    card.className = 'donor-card';
 
-                    // New Column Order: Name, Location, Contact, Group, Status
-                    const nameCell = row.insertCell();
-                    nameCell.textContent = donor.name;
-                    nameCell.className = 'px-2 py-3 text-sm name-cell-truncate text-gray-700';
-
-                    const locationCell = row.insertCell();
-                    locationCell.textContent = donor.location || 'N/A';
-                    locationCell.className = 'px-2 py-3 text-sm location-cell-style text-gray-600';
-
-                    const contactCell = row.insertCell();
+                    const contactButtonClass = donor.isAvailable ? 'available' : 'unavailable';
+                    const bloodGroupPillClass = donor.isAvailable ? 'available' : 'unavailable'; 
                     const displayContact = donor.contact && !donor.contact.startsWith('0') && /^\d{10}$/.test(donor.contact) ? '0' + donor.contact : donor.contact;
-                    
-                    const contactIconDiv = document.createElement('div');
-                    contactIconDiv.className = 'table-contact-icon-wrapper'; 
-                    contactIconDiv.innerHTML = `<svg class="table-contact-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>`;
-                    contactIconDiv.title = `Contact options for ${displayContact}`; 
-                    contactIconDiv.addEventListener('click', (e) => {
-                        e.preventDefault(); 
+
+                    card.innerHTML = `
+                        <div class="donor-card-header">
+                            <h4 class="donor-name">${donor.name}</h4>
+                            <div class="flex items-center">
+                                <span class="donor-blood-group ${bloodGroupPillClass}">${donor.bloodGroup}</span>
+                            </div>
+                        </div>
+                        <div class="donor-details">
+                            <p>
+                                <img src="images/location.png" alt="Location" class="location-icon w-4 h-4 mr-1.5">
+                                ${donor.location || 'N/A'}
+                            </p>
+                        </div>
+                        <button class="contact-donor-button ${contactButtonClass}">
+                             <img src="images/telephone.png" alt="Call" class="w-5 h-5 mr-2"> 
+                            যোগাযোগ করুন
+                        </button>
+                    `;
+                    const contactButton = card.querySelector('.contact-donor-button');
+                    contactButton.addEventListener('click', (e) => {
                         animateAndAct(e.currentTarget, () => {
                             showContactActionModal(displayContact);
                         });
                     });
-                    contactCell.className = 'px-2 py-3 text-sm contact-cell-clickable'; 
-                    contactCell.appendChild(contactIconDiv);
-                    
-                    const bloodGroupCell = row.insertCell();
-                    bloodGroupCell.innerHTML = `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">${donor.bloodGroup}</span>`;
-                    bloodGroupCell.className = 'px-2 py-3 whitespace-nowrap text-sm group-cell-style';
-
-                    const statusCell = row.insertCell();
-                    statusCell.className = 'px-2 py-3 whitespace-nowrap text-sm status-cell-style';
-                    const statusDot = document.createElement('span');
-                    statusDot.className = 'status-dot';
-                    
-                    if (donor.isAvailable) {
-                        statusDot.style.backgroundColor = '#10B981'; 
-                        statusDot.title = 'রক্তদানের জন্য প্রস্তুত'; 
-                    } else {
-                        statusDot.style.backgroundColor = '#EF4444'; 
-                        statusDot.title = 'সম্প্রতি রক্ত দিয়েছেন'; 
-                    }
-                    statusCell.appendChild(statusDot);
+                    if(donorsListContainer) donorsListContainer.appendChild(card);
                 });
             }
-            loadingSpinnerResults.style.display = 'none';
+            if(loadingSpinnerResults) loadingSpinnerResults.style.display = 'none';
         }
         
         function showToast(message, isWarning = false) {
@@ -1137,11 +1335,13 @@
                 showPage('home'); 
             });
         });
-        profileButton.addEventListener('click', (e) => {
+        
+        developerInfoButton.addEventListener('click', (e) => {
             animateAndAct(e.currentTarget, () => {
-                 showToast('Profile feature coming soon!');
+                 showDeveloperInfoModal();
             });
         });
+        
         window.addEventListener('online', async () => {
             if(currentPageId === 'home') initSlideshow(); 
             showToast("আপনি এখন অনলাইনে আছেন! ডেটা আপডেট করা হচ্ছে...", false); 
@@ -1176,6 +1376,12 @@
             });
         }
 
+        // Status Filter Button Listeners (Now Removed)
+        // if(filterAllButton) filterAllButton.addEventListener('click', () => { ... });
+        // if(filterAvailableButton) filterAvailableButton.addEventListener('click', () => { ... });
+        // if(filterUnavailableButton) filterUnavailableButton.addEventListener('click', () => { ... });
+
+
         contactActionCallButton.addEventListener('click', () => {
             if (currentContactForModal) {
                 window.location.href = `tel:${currentContactForModal}`;
@@ -1197,6 +1403,14 @@
                 hideContactActionModal();
             }
         });
+
+        developerInfoCloseButton.addEventListener('click', hideDeveloperInfoModal);
+        developerInfoModal.addEventListener('click', (event) => {
+            if (event.target === developerInfoModal) {
+                hideDeveloperInfoModal();
+            }
+        });
+
 
         document.addEventListener('DOMContentLoaded', () => {
             initializeFaqAccordion();
