@@ -24,6 +24,7 @@
             display: flex;
             flex-direction: column;
             position: relative;
+            overflow-x: hidden;
         }
         .page {
             display: none;
@@ -36,80 +37,54 @@
             flex-direction: column;
         }
         
-        .name-cell-truncate {
-            max-width: 100px; 
-            min-width: 80px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        #sideNav {
+            position: fixed;
+            top: 0;
+            left: -280px; /* Initially hidden off-screen */
+            width: 280px;
+            height: 100%;
+            background-color: white;
+            z-index: 1100;
+            transition: left 0.3s ease-in-out;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            padding: 1.5rem;
         }
-        .location-cell-style {
-            max-width: 90px; 
-            min-width: 70px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        #sideNav.open {
+            left: 0;
         }
-        .contact-cell-clickable { 
-            cursor: pointer; 
-            text-align: center; 
-            max-width: 40px; 
-            min-width: 40px;
+        #navOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1099;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
         }
-        .table-contact-icon-wrapper { 
-            width: 28px; 
-            height: 28px;
-            border-radius: 50%;
-            background-color: #25D366; 
-            display: inline-flex; 
-            align-items: center;
-            justify-content: center;
-            transition: background-color 0.2s;
-        }
-        .table-contact-icon-wrapper:hover {
-            background-color: #1DAE50; 
-        }
-        .table-contact-icon-svg { 
-            width: 12px; 
-            height: 12px;
-            fill: white; 
-        }
-      
-        .group-cell-style { 
-            max-width: 40px; 
-            min-width: 35px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            text-align: center;
-        }
-        .status-cell-style { 
-             max-width: 40px; 
-             min-width: 35px;
-             text-align: center;
+        #navOverlay.open {
+            opacity: 1;
+            visibility: visible;
         }
 
         #toastMessage {
             position: fixed;
-            bottom: 20px;
+            bottom: -100px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #10B981; 
+            background-color: #2c3e50;
             color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 12px 24px;
+            border-radius: 9999px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             z-index: 1050; 
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out, bottom 0.3s ease-in-out;
+            transition: bottom 0.5s ease-in-out;
             pointer-events: none;
         }
         #toastMessage.show {
-            opacity: 1;
             bottom: 30px;
-        }
-        #toastMessage.warning {
-            background-color: #f59e0b; 
         }
         #loadingSpinnerPage2, #loadingSpinnerResults {
             display: none;
@@ -299,7 +274,7 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             cursor: pointer;
             z-index: 900;
-            transition: background-color 0.2s ease-in-out;
+            transition: background-color 0.2s ease-in-out, opacity 0.3s, visibility 0.3s;
         }
         #floatingFaqButton:hover {
             background-color: #0284c7;
@@ -359,44 +334,40 @@
         }
         .modal-content {
             background-color: white;
-            padding: 1.5rem; /* Existing padding, can adjust if needed */
-            border-radius: 0.75rem; /* Slightly more rounded */
+            padding: 1.5rem;
+            border-radius: 0.75rem;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             width: 90%;
-            max-width: 320px; /* Slightly narrower to match image proportion */
+            max-width: 320px;
             text-align: center; 
         }
-        /* Updated title for "ফোন নম্বর" */
         .modal-content h3 { 
-            font-size: 0.875rem; /* text-sm */
-            color: #6b7280; /* text-gray-500 */
-            font-weight: 500; /* font-medium */
-            margin-bottom: 0.25rem; /* Reduced margin */
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
         }
-        /* This general P styling is fine, specific ID below for number */
         .modal-content p {
             font-size: 1rem;
             color: #374151;
             margin-bottom: 0.25rem; 
         }
-        /* Updated styling for the phone number */
         .modal-content p#contactActionNumber { 
-            font-size: 1.875rem; /* text-3xl, larger */
-            color: #1f2937; /* text-gray-800, darker */
-            font-weight: 600; /* font-semibold, bolder */
-            margin-bottom: 1.25rem; /* Adjusted margin */
+            font-size: 1.875rem;
+            color: #1f2937;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
             word-break: break-all; 
         }
         .modal-actions {
             display: flex;
             flex-direction: column; 
             gap: 0.75rem; 
-            margin-top: 1rem; /* Adjusted margin */
+            margin-top: 1rem;
         }
-        /* General button style update */
         .modal-button {
-            padding: 0.875rem 1rem; /* Slightly taller buttons */
-            border-radius: 0.5rem; /* rounded-lg */
+            padding: 0.875rem 1rem;
+            border-radius: 0.5rem;
             font-weight: 500;
             transition: background-color 0.2s;
             width: 100%; 
@@ -404,32 +375,29 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem; 
-            font-size: 0.95rem; /* Slightly adjusted font size for buttons */
+            font-size: 0.95rem;
         }
-        /* Call button - green, color is good */
         .modal-button-primary { 
-            background-color: #16a34a; /* Tailwind green-600 */
+            background-color: #16a34a;
             color: white;
         }
         .modal-button-primary:hover {
-            background-color: #15803d; /* Darker green */
+            background-color: #15803d;
         }
-        /* Copy button - updated to a more solid blue */
         .modal-button-secondary { 
-            background-color: #3b82f6; /* Tailwind blue-500 */
+            background-color: #3b82f6;
             color: white;
         }
         .modal-button-secondary:hover {
-            background-color: #2563eb; /* Tailwind blue-600 */
+            background-color: #2563eb;
         }
-        /* Close button - updated to lighter gray */
-         .modal-button-tertiary { 
-            background-color: #f3f4f6; /* Tailwind gray-100 */
-            color: #374151; /* Tailwind gray-700 */
-            border: 1px solid #e5e7eb; /* Added a light border */
+        .modal-button-tertiary { 
+            background-color: #f3f4f6;
+            color: #374151;
+            border: 1px solid #e5e7eb;
         }
         .modal-button-tertiary:hover {
-            background-color: #e5e7eb; /* Tailwind gray-200 */
+            background-color: #e5e7eb;
         }
         #developerModalImage {
             width: 100px;
@@ -457,8 +425,6 @@
         .developer-social-links a:hover img {
             transform: scale(1.1);
         }
-
-        /* Donor Card Styles */
         .donor-card {
             background-color: white;
             border-radius: 0.75rem; 
@@ -532,8 +498,6 @@
             width: 18px;
             height: 18px;
         }
-        
-        /* Donor Count Stats */
         .donor-stats {
             display: flex;
             justify-content: space-between;
@@ -550,30 +514,69 @@
             margin-right: 0.25rem;
             fill: currentColor;
         }
-
+        
+        /* Animation Styles */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-on-load {
+            opacity: 0;
+            animation-fill-mode: forwards;
+            animation-duration: 0.5s;
+            animation-timing-function: ease-out;
+            animation-name: fadeInUp;
+            animation-delay: var(--animation-delay, 0s);
+        }
+        /* Language Modal Styles */
+        .lang-button-container {
+            display: flex;
+            border: 1px solid #ef4444;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+        .lang-button {
+            flex-grow: 1;
+            padding: 0.75rem 1rem;
+            background-color: white;
+            color: #ef4444;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        .lang-button.active {
+            background-color: #ef4444;
+            color: white;
+        }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- Header Section: Contains navigation buttons and title -->
+        <!-- Header Section -->
         <header class="flex items-center justify-between p-4 border-b border-gray-200 sticky top-0 bg-white z-50 h-16">
-            <div class="w-10 flex items-center justify-start">
-                <!-- Hamburger Menu Button (Visible on Home Page) -->
-                <button id="hamburgerButton" aria-label="Menu" class="hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="header-icon text-gray-700">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                    </svg>
-                </button>
-                <!-- Back Button (Visible on other pages) -->
-                <button id="headerBackButton" aria-label="Back" class="hidden">
+            <div class="flex-1 flex justify-start">
+                 <button id="hamburgerButton" aria-label="Menu">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                 </button>
+                 <button id="headerBackButton" aria-label="Back" class="hidden">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="header-icon text-red-600">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                     </svg>
                 </button>
             </div>
-            <h1 id="headerTitle" class="text-xl font-semibold text-gray-800 text-center flex-grow">Blood Donor</h1>
-            <div class="w-10 flex items-center justify-end">
-                 <!-- Developer Info Button -->
+            <div class="flex-1 text-center">
+                 <h1 id="headerTitle" class="text-lg font-semibold text-gray-800 whitespace-nowrap" data-lang-key="appTitle">Blood Donor</h1>
+            </div>
+            <div class="flex-1 flex justify-end">
                 <button id="developerInfoButton" aria-label="Developer Info">
                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="header-icon text-red-600">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
@@ -584,173 +587,102 @@
 
         <!-- Home Page Content -->
         <div id="homePage" class="page active">
-            <!-- Image Slideshow Container -->
             <div id="imageSlideshow"></div>
             <div class="flex-grow flex flex-col justify-start">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2 text-center whitespace-nowrap">আপনার রক্তে বাঁচুক প্রাণ</h2>
-                <p class="text-gray-600 mb-4 text-center">রক্তদাতা খুঁজুন অথবা রক্তদাতা হিসেবে যোগ দিন</p>
-                <!-- Button to navigate to Find Donor page -->
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2 text-center whitespace-nowrap" data-lang-key="homeSlogan">আপনার রক্তে বাঁচুক প্রাণ</h2>
+                <p class="text-gray-600 mb-4 text-center" data-lang-key="homeSubtitle">রক্তদাতা খুঁজুন অথবা রক্তদাতা হিসেবে যোগ দিন</p>
                 <button id="findDonorButton" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md mb-3 flex items-center justify-center text-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 mr-3"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
-                    Find Donor
+                    <span data-lang-key="findDonor">রক্তদাতা খুঁজুন</span>
                 </button>
-                <!-- Button to open Google Form for becoming a donor -->
                 <button id="becomeDonorAppButton" class="w-full border-2 border-red-600 text-red-600 hover:bg-red-50 font-semibold py-3 px-4 rounded-lg flex items-center justify-center text-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 mr-3"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
-                    Become a Donor
+                    <span data-lang-key="becomeDonor">রক্তদাতা হোন</span>
                 </button>
-                </div>
+            </div>
         </div>
 
         <!-- Select Blood Group Page Content -->
         <div id="selectBloodGroupPage" class="page">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Select Blood Groups</h2>
-            <!-- Container for blood group selection cards -->
-            <div id="bloodGroupCardsContainer" class="grid grid-cols-2 gap-4"></div>
-            <!-- Loading spinner for this page -->
+            <div id="bloodGroupCardsContainer" class="grid grid-cols-2 gap-4 mt-8"></div>
             <div id="loadingSpinnerPage2" class="mt-6"></div>
-            <!-- Error message display for this page -->
             <p id="errorMessagePage2" class="mt-4 text-center text-red-600 hidden"></p>
         </div>
 
         <!-- Donor Results Page Content -->
         <div id="resultsPage" class="page">
-            <!-- Location Filter Dropdown -->
-            <div class="mb-4"> 
-                <select id="locationFilterSelect" name="locationFilter" aria-label="এলাকা অনুযায়ী ফিল্টার করুন">
-                     <!-- Options will be populated by JavaScript -->
-                </select>
+            <div class="mb-4" id="locationFilterWrapper"> 
+                <select id="locationFilterSelect" name="locationFilter" aria-label="এলাকা অনুযায়ী ফিল্টার করুন"></select>
             </div>
-            
-            <!-- Donor Statistics Section -->
             <div id="donorStats" class="donor-stats">
                 <span id="totalDonorsStat" class="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 mr-1"><path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" /></svg>
-                    মোট রক্তদাতা: <span id="totalDonorsCount">0</span>
+                    <span data-lang-key="totalDonors">মোট রক্তদাতা</span>: <span id="totalDonorsCount">0</span>
                 </span>
                 <span id="availableDonorsStat" class="flex items-center">
                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 mr-1 text-green-500"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
-                    উপলব্ধ: <span id="availableDonorsCount">0</span>
+                    <span data-lang-key="available">উপলব্ধ</span>: <span id="availableDonorsCount">0</span>
                 </span>
             </div>
-            
-            <!-- Status Legend for Donor Availability -->
             <div id="statusLegend" class="mb-4 text-sm text-gray-700">
-                <p><span class="status-dot" style="background-color: #10B981;"></span>রক্তদানের জন্য প্রস্তুত</p>
-                <p><span class="status-dot" style="background-color: #EF4444;"></span>সম্প্রতি রক্ত দিয়েছেন</p>
+                <p><span class="status-dot" style="background-color: #10B981;"></span><span data-lang-key="readyToDonate">রক্তদানের জন্য প্রস্তুত</span></p>
+                <p><span class="status-dot" style="background-color: #EF4444;"></span><span data-lang-key="recentlyDonated">সম্প্রতি রক্ত দিয়েছেন</span></p>
             </div>
-            <!-- Loading spinner for results -->
             <div id="loadingSpinnerResults"></div>
-            <!-- Container for displaying donor cards -->
-            <div id="donorsListContainer"> 
-                <!-- Donor cards will be generated here -->
-            </div>
-            <!-- Message for when no results are found -->
+            <div id="donorsListContainer"></div>
             <p id="noResultsMessage" class="mt-4 text-center text-gray-600 hidden"></p>
-            <!-- Error message display for results page -->
             <p id="errorMessageResults" class="mt-4 text-center text-red-600 hidden"></p>
         </div>
 
         <!-- FAQ Page Content -->
         <div id="faqPage" class="page">
-            <div id="faqContent">
-                 <!-- FAQ Item 1 -->
-                 <div class="faq-item">
-                    <div class="faq-question-header">
-                        <span class="faq-question-text">১. রক্ত কারা দিতে পারবেন?</span>
-                        <svg class="faq-toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </div>
-                    <div class="faq-answer">
-                        <p>উত্তর: ১৮ থেকে ৬০ বছর বয়সী যেকোনো সুস্থ মানুষ, যাদের ওজন ৪৫ কেজির উপরে, তারা রক্ত দিতে পারবেন। তবে কিছু বিশেষ শারীরিক অবস্থায় রক্ত দেওয়া থেকে বিরত থাকতে বলা হয়।</p>
-                    </div>
-                </div>
-                <!-- FAQ Item 2 -->
-                <div class="faq-item">
-                    <div class="faq-question-header">
-                        <span class="faq-question-text">২. কতদিন পর পর রক্ত দেওয়া যায়?</span>
-                        <svg class="faq-toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </div>
-                    <div class="faq-answer">
-                        <p>উত্তর: একজন সুস্থ পুরুষ প্রতি ৩ মাস পর পর এবং একজন সুস্থ মহিলা প্রতি ৪ মাস পর পর রক্ত দিতে পারবেন।</p>
-                    </div>
-                </div>
-                <!-- FAQ Item 3 -->
-                <div class="faq-item">
-                    <div class="faq-question-header">
-                        <span class="faq-question-text">৩. রক্ত দেওয়ার প্রক্রিয়াটি কেমন?</span>
-                        <svg class="faq-toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </div>
-                    <div class="faq-answer">
-                        <p>উত্তর: রক্ত দেওয়ার আগে আপনার কিছু সাধারণ স্বাস্থ্য পরীক্ষা করা হবে, যেমন - ওজন, রক্তচাপ, নাড়ির গতি এবং রক্তে হিমোগ্লোবিনের মাত্রা। পুরো প্রক্রিয়াটি সাধারণত ১০-১৫ মিনিট সময় নেয়, তবে রক্তদান পরবর্তী বিশ্রাম সহ মোট ৩০-৪০ মিনিট লাগতে পারে।</p>
-                    </div>
-                </div>
-                 <!-- FAQ Item 4 -->
-                 <div class="faq-item">
-                    <div class="faq-question-header">
-                        <span class="faq-question-text">৪. রক্ত দিলে কি শরীর দুর্বল হয়ে যায়?</span>
-                        <svg class="faq-toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </div>
-                    <div class="faq-answer">
-                        <p>উত্তর: রক্ত দেওয়ার পর সাময়িকভাবে সামান্য দুর্বল লাগতে পারে, তবে পর্যাপ্ত বিশ্রাম ও তরল পান করলে শরীর দ্রুত স্বাভাবিক অবস্থায় ফিরে আসে। রক্ত দেওয়ার ফলে শরীরের কোনো স্থায়ী ক্ষতি হয় না, বরং এটি স্বাস্থ্যের জন্য উপকারী।</p>
-                    </div>
-                </div>
-                <!-- FAQ Item 5 -->
-                <div class="faq-item">
-                    <div class="faq-question-header">
-                        <span class="faq-question-text">৫. রক্ত দেওয়ার আগে কি ধরনের প্রস্তুতি নেওয়া উচিত?</span>
-                        <svg class="faq-toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </div>
-                    <div class="faq-answer">
-                        <p>উত্তর: রক্ত দেওয়ার আগে রাতে পর্যাপ্ত ঘুমানো উচিত এবং সকালে স্বাস্থ্যকর নাস্তা করা উচিত। খালি পেটে রক্ত দেওয়া উচিত নয়। প্রচুর পরিমাণে পানি ও তরল পান করুন।</p>
-                    </div>
-                </div>
-            </div>
+            <div id="faqContent"></div>
         </div>
     </div>
-
-    <!-- Floating FAQ Button -->
     <button id="floatingFaqButton" aria-label="সাধারণ জিজ্ঞাসা">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
         </svg>
     </button>
-
-    <!-- Contact Action Modal: Pops up when user clicks to contact a donor -->
+    
+    <!-- Modals -->
+    <div id="languageModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="text-lg font-semibold" data-lang-key="language">ভাষা</h3>
+            <div class="lang-button-container">
+                <button class="lang-button" data-lang="en">English</button>
+                <button class="lang-button" data-lang="bn">বাংলা</button>
+            </div>
+        </div>
+    </div>
     <div id="contactActionModal" class="modal-overlay">
         <div class="modal-content">
-            <!-- Changed h3 text to "ফোন নম্বর" -->
-            <h3>ফোন নম্বর</h3> 
-            <p id="contactActionNumber"></p> <!-- Contact number will be inserted here -->
+            <h3 data-lang-key="phoneNumber">ফোন নম্বর</h3> 
+            <p id="contactActionNumber"></p>
             <div class="modal-actions">
-                <!-- Call Button -->
                 <button id="contactActionCallButton" class="modal-button modal-button-primary">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 6.75Z" /></svg>
-                    কল করুন
+                    <span data-lang-key="call">কল করুন</span>
                 </button>
-                <!-- Copy Number Button -->
                 <button id="contactActionCopyButton" class="modal-button modal-button-secondary">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" /></svg>
-                    কপি করুন
+                    <span data-lang-key="copy">কপি করুন</span>
                 </button>
-                <!-- Close Modal Button with new X icon -->
                 <button id="contactActionCloseButton" class="modal-button modal-button-tertiary">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 mr-2"> <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /> </svg>
-                    বন্ধ করুন
+                    <span data-lang-key="close">বন্ধ করুন</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Developer Info Modal -->
     <div id="developerInfoModal" class="modal-overlay">
         <div class="modal-content">
-            <h3>About Developer</h3>
-            <!-- Developer Image with Placeholder Fallback -->
+            <h3 data-lang-key="aboutDeveloper">ডেভেলপার সম্পর্কে</h3>
             <img id="developerModalImage" src="images/developer.jpg" alt="Developer Photo" 
                  onerror="this.onerror=null; this.src='https://placehold.co/100x100/cccccc/ffffff?text=Photo'; this.alt='Developer photo not available'">
             <p id="developerName" class="font-semibold text-lg mb-1">Md Shahriya Hasan Sohag</p> 
-            <p id="developerTitle" class="text-gray-600">Graphics Designer</p>
-            <!-- Social Media Links -->
+            <p id="developerTitle" class="text-gray-600" data-lang-key="developerTitle">গ্রাফিক্স ডিজাইনার</p>
             <div class="developer-social-links">
                 <a href="https://wa.link/mnyy7m" target="_blank" aria-label="WhatsApp">
                     <img src="images/whatsapp.png" alt="WhatsApp" title="WhatsApp" onerror="this.style.display='none'">
@@ -760,61 +692,154 @@
                 </a>
             </div>
             <div class="modal-actions">
-                 <!-- Close Developer Modal Button -->
-                <button id="developerInfoCloseButton" class="modal-button modal-button-tertiary">বন্ধ করুন</button>
+                <button id="developerInfoCloseButton" class="modal-button modal-button-tertiary" data-lang-key="close">বন্ধ করুন</button>
             </div>
         </div>
     </div>
 
 
     <!-- Toast Message Notification Area -->
-    <div id="toastMessage">Number copied!</div>
+    <div id="toastMessage"></div>
 
     <script>
         // --- CONFIGURATION ---
         const googleSheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBPra3YNf8aSK4j343nemCQyoU3ZeSOsWWvSFclImWj5Zb4mONvrWcYWacOLh3KDizZ12qouuJDMC0/pub?gid=0&single=true&output=csv';
         const googleFormLink = 'https://docs.google.com/forms/d/e/1FAIpQLScawb_WPHqzRSsk9eHhOd23Xmmed9IxZuwQnImA-8ARIgklqA/viewform?usp=dialog';
-        const ANIMATION_DELAY = 150; // Delay for click animations in milliseconds
-        const LOCAL_STORAGE_KEY = 'bloodDonorOfflineData'; // Key for storing offline data in localStorage
-        const LAST_FETCH_TIMESTAMP_KEY = 'bloodDonorLastFetchTimestamp'; // Key for storing the timestamp of the last successful data fetch
+        const ANIMATION_DELAY = 150; 
+        const LOCAL_STORAGE_KEY = 'bloodDonorOfflineData'; 
+        const LAST_FETCH_TIMESTAMP_KEY = 'bloodDonorLastFetchTimestamp';
+        const LANG_STORAGE_KEY = 'bloodDonorLang';
+
+        // --- LANGUAGE & TRANSLATION ---
+        let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || 'bn';
+        const translations = {
+            en: {
+                appTitle: "Blood Donor",
+                homeSlogan: "Save a Life, Give Blood",
+                homeSubtitle: "Find a donor or become one",
+                findDonor: "Find Donor",
+                becomeDonor: "Become a Donor",
+                selectBloodGroup: "Select Blood Group",
+                donors: "Blood Donors",
+                bloodDonor: "Blood Donor",
+                bloodDonors: "Blood Donors",
+                totalDonors: "Total Donors",
+                available: "Available",
+                readyToDonate: "Ready to Donate",
+                recentlyDonated: "Recently Donated",
+                contact: "Contact",
+                phoneNumber: "Phone Number",
+                call: "Call",
+                copy: "Copy",
+                close: "Close",
+                aboutDeveloper: "About Developer",
+                developerTitle: "Graphics Designer",
+                faqTitle: "FAQ",
+                language: "Language",
+                languageChanged: "Language changed successfully",
+                faq: [
+                    { q: "1. Who can donate blood?", a: "Answer: Any healthy person between 18 and 60 years old, weighing over 45 kg, can donate blood. However, some specific physical conditions may prevent donation." },
+                    { q: "2. How often can one donate blood?", a: "Answer: A healthy man can donate every 3 months, and a healthy woman can donate every 4 months." },
+                    { q: "3. What is the blood donation process like?", a: "Answer: Before donating, you will undergo a simple health check, including weight, blood pressure, pulse, and hemoglobin levels. The entire process usually takes 10-15 minutes, but including rest afterwards, it may take 30-40 minutes in total." },
+                    { q: "4. Does donating blood make you weak?", a: "Answer: You might feel slightly weak temporarily after donating, but with adequate rest and fluid intake, the body quickly returns to normal. Donating blood does not cause any permanent harm; rather, it is beneficial for health." },
+                    { q: "5. What preparations should be taken before donating blood?", a: "Answer: You should get enough sleep the night before and have a healthy breakfast in the morning. Do not donate on an empty stomach. Drink plenty of water and fluids." }
+                ],
+                noDonorsFound: "No donors found for {group} in {location}.",
+                allAreas: "Select Area",
+                dataFetchError: "Failed to load donor data. Please check your connection.",
+                copied: "Copied: {text}",
+                copyError: "Failed to copy.",
+                youAreOnline: "You are now online! Updating data...",
+                youAreOffline: "⚠️ You are offline. Showing cached data.",
+                offlineDataWarning: "⚠️ You are viewing offline data. This may not be the latest information.",
+                lastUpdated: "Last updated: {date}"
+            },
+            bn: {
+                appTitle: "ব্লাড ডোনার",
+                homeSlogan: "আপনার রক্তে বাঁচুক প্রাণ",
+                homeSubtitle: "রক্তদাতা খুঁজুন অথবা রক্তদাতা হিসেবে যোগ দিন",
+                findDonor: "রক্তদাতা খুঁজুন",
+                becomeDonor: "রক্তদাতা হোন",
+                selectBloodGroup: "ব্লাড গ্রুপ নির্বাচন করুন",
+                donors: "রক্তদাতা তালিকা",
+                bloodDonor: "রক্তদাতা",
+                bloodDonors: "রক্তদাতা",
+                totalDonors: "মোট রক্তদাতা",
+                available: "উপলব্ধ",
+                readyToDonate: "রক্তদানের জন্য প্রস্তুত",
+                recentlyDonated: "সম্প্রতি রক্ত দিয়েছেন",
+                contact: "যোগাযোগ করুন",
+                phoneNumber: "ফোন নম্বর",
+                call: "কল করুন",
+                copy: "কপি করুন",
+                close: "বন্ধ করুন",
+                aboutDeveloper: "ডেভেলপার সম্পর্কে",
+                developerTitle: "গ্রাফিক্স ডিজাইনার",
+                faqTitle: "সাধারণ জিজ্ঞাসা",
+                language: "ভাষা",
+                languageChanged: "ভাষা পরিবর্তন সম্পন্ন হয়েছে",
+                 faq: [
+                    { q: "১. রক্ত কারা দিতে পারবেন?", a: "উত্তর: ১৮ থেকে ৬০ বছর বয়সী যেকোনো সুস্থ মানুষ, যাদের ওজন ৪৫ কেজির উপরে, তারা রক্ত দিতে পারবেন। তবে কিছু বিশেষ শারীরিক অবস্থায় রক্ত দেওয়া থেকে বিরত থাকতে বলা হয়।" },
+                    { q: "২. কতদিন পর পর রক্ত দেওয়া যায়?", a: "উত্তর: একজন সুস্থ পুরুষ প্রতি ৩ মাস পর পর এবং একজন সুস্থ মহিলা প্রতি ৪ মাস পর পর রক্ত দিতে পারবেন।" },
+                    { q: "৩. রক্ত দেওয়ার প্রক্রিয়াটি কেমন?", a: "উত্তর: রক্ত দেওয়ার আগে আপনার কিছু সাধারণ স্বাস্থ্য পরীক্ষা করা হবে, যেমন - ওজন, রক্তচাপ, নাড়ির গতি এবং রক্তে হিমোগ্লোবিনের মাত্রা। পুরো প্রক্রিয়াটি সাধারণত ১০-১৫ মিনিট সময় নেয়, তবে রক্তদান পরবর্তী বিশ্রাম সহ মোট ৩০-৪০ মিনিট লাগতে পারে।" },
+                    { q: "৪. রক্ত দিলে কি শরীর দুর্বল হয়ে যায়?", a: "উত্তর: রক্ত দেওয়ার পর সাময়িকভাবে সামান্য দুর্বল লাগতে পারে, তবে পর্যাপ্ত বিশ্রাম ও তরল পান করলে শরীর দ্রুত স্বাভাবিক অবস্থায় ফিরে আসে। রক্ত দেওয়ার ফলে শরীরের কোনো স্থায়ী ক্ষতি হয় না, বরং এটি স্বাস্থ্যের জন্য উপকারী।" },
+                    { q: "৫. রক্ত দেওয়ার আগে কি ধরনের প্রস্তুতি নেওয়া উচিত?", a: "উত্তর: রক্ত দেওয়ার আগে রাতে পর্যাপ্ত ঘুমানো উচিত এবং সকালে স্বাস্থ্যকর নাস্তা করা উচিত। খালি পেটে রক্ত দেওয়া উচিত নয়। প্রচুর পরিমাণে পানি ও তরল পান করুন।" }
+                ],
+                noDonorsFound: "{location} অবস্থানে {group} এর জন্য কোন দাতা খুঁজে পাওয়া যায়নি।",
+                allAreas: "এলাকা নির্বাচন করুন",
+                dataFetchError: "ডেটা লোড করতে ব্যর্থ। আপনার সংযোগ পরীক্ষা করুন।",
+                copied: "কপি করা হয়েছে: {text}",
+                copyError: "কপি করতে সমস্যা হয়েছে।",
+                youAreOnline: "আপনি এখন অনলাইনে আছেন! ডেটা আপডেট করা হচ্ছে...",
+                youAreOffline: "⚠️ আপনি এখন অফলাইনে আছেন। সংরক্ষিত ডেটা দেখানো হচ্ছে।",
+                offlineDataWarning: "⚠️ আপনি অফলাইন ডেটা দেখছেন। এটি সর্বশেষ তথ্য নাও হতে পারে।",
+                lastUpdated: "সর্বশেষ আপডেট: {date}"
+            }
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem(LANG_STORAGE_KEY, lang);
+            document.querySelectorAll('[data-lang-key]').forEach(el => {
+                const key = el.dataset.langKey;
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+            // Update active button in language modal
+            document.querySelectorAll('#languageModal .lang-button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            // Update dynamic content
+            updateHeaderIcons();
+            populateFaq();
+            if (currentPageId === 'selectBloodGroup') renderBloodGroupCards();
+            if (currentPageId === 'results' && currentSelectedBloodGroup) {
+                 displayDonorsForGroup(currentSelectedBloodGroup, locationFilterSelect.value);
+            }
+        }
 
         // --- GLOBAL STATE VARIABLES ---
-        let allDonors = []; // Array to hold all donor data fetched from the sheet
-        let bloodGroupCounts = {}; // Object to store counts of donors for each blood group
-        const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]; // Standard blood groups
-        let currentPageId = 'home'; // Tracks the currently active page
-        let initialDataFetchFailed = false; // Flag to indicate if the initial data fetch failed
-        let currentSelectedBloodGroup = null; // Stores the currently selected blood group by the user
-        let currentContactForModal = null;  // Stores the contact number for the currently open contact modal
-        let isHandlingPopState = false; // Flag to prevent redundant history pushes during popstate handling
+        let allDonors = []; 
+        let bloodGroupCounts = {}; 
+        const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]; 
+        let currentPageId = 'home'; 
+        let initialDataFetchFailed = false; 
+        let currentSelectedBloodGroup = null; 
+        let currentContactForModal = null;  
+        let isHandlingPopState = false; 
         
-        // Updated slideshowImageSources with online and local URLs
         const slideshowImageSources = [
-            {
-                onlineUrl: 'https://raw.githubusercontent.com/sohag525/Blood1/main/image3.jpg',
-                localUrl: 'images/image3.jpg',
-                text: 'You Could Save a Life',
-                color: '#ef4444'
-            },
-            {
-                onlineUrl: 'https://raw.githubusercontent.com/sohag525/Blood1/main/image2.jpg',
-                localUrl: 'images/image2.jpg',
-                text: 'Donate Blood Today',
-                color: '#3b82f6'
-            },
-            {
-                onlineUrl: 'https://raw.githubusercontent.com/sohag525/Blood1/main/image1.jpg',
-                localUrl: 'images/image1.jpg',
-                text: 'Be Someone\'s Hero',
-                color: '#10b981'
-            }
+            { onlineUrl: 'https://raw.githubusercontent.com/sohag525/Blood1/main/image3.jpg', localUrl: 'images/image3.jpg', text: 'You Could Save a Life' },
+            { onlineUrl: 'https://raw.githubusercontent.com/sohag525/Blood1/main/image2.jpg', localUrl: 'images/image2.jpg', text: 'Donate Blood Today' },
+            { onlineUrl: 'https://raw.githubusercontent.com/sohag525/Blood1/main/image1.jpg', localUrl: 'images/image1.jpg', text: 'Be Someone\'s Hero' }
         ];
-        let currentSlideIndex = 0; // Index for the current slide in the slideshow
-        let slideshowInterval; // Interval ID for the slideshow timer
+        let currentSlideIndex = 0;
+        let slideshowInterval; 
 
 
         // --- DOM ELEMENT REFERENCES ---
-        const pages = { home: null, selectBloodGroup: null, results: null, faq: null }; // Object to hold references to page divs
+        const pages = { home: null, selectBloodGroup: null, results: null, faq: null };
         const findDonorButton = document.getElementById('findDonorButton');
         const becomeDonorAppButton = document.getElementById('becomeDonorAppButton');
         const floatingFaqButton = document.getElementById('floatingFaqButton');
@@ -825,35 +850,34 @@
         const bloodGroupCardsContainer = document.getElementById('bloodGroupCardsContainer');
         const donorsListContainer = document.getElementById('donorsListContainer'); 
         const slideshowContainer = document.getElementById('imageSlideshow');
-        const toastMessage = document.getElementById('toastMessage'); // Toast notification element
-        let toastTimeout; // Timeout ID for hiding the toast message
-        const loadingSpinnerPage2 = document.getElementById('loadingSpinnerPage2'); // Spinner for blood group selection page
-        const loadingSpinnerResults = document.getElementById('loadingSpinnerResults'); // Spinner for donor results page
-        const noResultsMessage = document.getElementById('noResultsMessage'); // Message displayed when no donors are found
-        const errorMessagePage2 = document.getElementById('errorMessagePage2'); // Error message for blood group page
-        const errorMessageResults = document.getElementById('errorMessageResults'); // Error message for results page
-        const locationFilterSelect = document.getElementById('locationFilterSelect'); // Dropdown for filtering by location
-        const contactActionModal = document.getElementById('contactActionModal'); // Modal for contact actions (call/copy)
-        const contactActionNumber = document.getElementById('contactActionNumber'); // Displays contact number in modal
+        const toastMessage = document.getElementById('toastMessage');
+        let toastTimeout;
+        const loadingSpinnerPage2 = document.getElementById('loadingSpinnerPage2');
+        const loadingSpinnerResults = document.getElementById('loadingSpinnerResults');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+        const errorMessagePage2 = document.getElementById('errorMessagePage2');
+        const errorMessageResults = document.getElementById('errorMessageResults');
+        const locationFilterWrapper = document.getElementById('locationFilterWrapper');
+        const locationFilterSelect = document.getElementById('locationFilterSelect');
+        const donorStatsEl = document.getElementById('donorStats');
+        const statusLegendEl = document.getElementById('statusLegend');
+        const languageModal = document.getElementById('languageModal');
+        const contactActionModal = document.getElementById('contactActionModal');
+        const contactActionNumber = document.getElementById('contactActionNumber');
         const contactActionCallButton = document.getElementById('contactActionCallButton');
         const contactActionCopyButton = document.getElementById('contactActionCopyButton');
         const contactActionCloseButton = document.getElementById('contactActionCloseButton');
-        const developerInfoModal = document.getElementById('developerInfoModal'); // Modal for developer information
+        const developerInfoModal = document.getElementById('developerInfoModal');
         const developerInfoCloseButton = document.getElementById('developerInfoCloseButton');
-        const totalDonorsCountEl = document.getElementById('totalDonorsCount'); // Element to display total donors count
-        const availableDonorsCountEl = document.getElementById('availableDonorsCount'); // Element to display available donors count
+        const totalDonorsCountEl = document.getElementById('totalDonorsCount');
+        const availableDonorsCountEl = document.getElementById('availableDonorsCount');
 
-        // Assign page elements to the pages object
+        // Assign page elements
         pages.home = document.getElementById('homePage');
         pages.selectBloodGroup = document.getElementById('selectBloodGroupPage');
         pages.results = document.getElementById('resultsPage');
         pages.faq = document.getElementById('faqPage');
         
-        /**
-         * Applies a click animation to an element and then executes a callback function.
-         * @param {HTMLElement} element - The HTML element to animate.
-         * @param {Function} callback - The function to execute after the animation delay.
-         */
         function animateAndAct(element, callback) {
             if (element) {
                 element.classList.add('animate-click');
@@ -866,37 +890,56 @@
             }
         }
 
-        /**
-         * Updates the header icons (hamburger/back) and title based on the current page.
-         */
         function updateHeaderIcons() {
             if (currentPageId === 'home') {
                 hamburgerButton.classList.remove('hidden');
                 headerBackButton.classList.add('hidden');
-                if(headerTitle) headerTitle.textContent = 'Blood Donor';
+                headerTitle.textContent = translations[currentLang].appTitle;
             } else {
                 hamburgerButton.classList.add('hidden');
                 headerBackButton.classList.remove('hidden');
-                if (headerTitle) {
-                    if (currentPageId === 'faq') {
-                        headerTitle.textContent = 'সাধারণ জিজ্ঞাসা'; 
-                    } else if (currentPageId === 'selectBloodGroup') {
-                         headerTitle.textContent = 'Blood Group';
-                    } else if (currentPageId === 'results') {
-                         headerTitle.textContent = `রক্তদাতা তালিকা (${currentSelectedBloodGroup || ''})`; 
-                    } else {
-                        headerTitle.textContent = 'Blood Donor'; 
-                    }
+                if (currentPageId === 'faq') {
+                    headerTitle.textContent = translations[currentLang].faqTitle;
+                } else if (currentPageId === 'selectBloodGroup') {
+                    headerTitle.textContent = translations[currentLang].selectBloodGroup;
+                } else if (currentPageId === 'results') {
+                    headerTitle.textContent = `${translations[currentLang].donors} (${currentSelectedBloodGroup || ''})`;
+                } else {
+                    headerTitle.textContent = translations[currentLang].appTitle;
                 }
             }
         }
         
-        // --- PAGE NAVIGATION & HISTORY MANAGEMENT ---
         function showPage(pageId, isBackNav = false) {
             currentPageId = pageId;
             Object.values(pages).forEach(page => page.classList.remove('active'));
             if (pages[pageId]) pages[pageId].classList.add('active');
             updateHeaderIcons(); 
+
+            if (floatingFaqButton) {
+                floatingFaqButton.style.display = pageId === 'home' ? 'flex' : 'none';
+            }
+
+
+            const elementsToReset = [
+                locationFilterWrapper, 
+                donorStatsEl, 
+                statusLegendEl
+            ];
+            elementsToReset.forEach(el => {
+                if(el) el.classList.remove('animate-on-load');
+            });
+            document.querySelectorAll('#bloodGroupCardsContainer .blood-group-card, #donorsListContainer .donor-card').forEach(card => card.classList.remove('animate-on-load'));
+
+            if (pageId === 'results') {
+                const elementsToAnimate = [locationFilterWrapper, donorStatsEl, statusLegendEl];
+                elementsToAnimate.forEach((el, index) => {
+                    if (el) {
+                        el.classList.add('animate-on-load');
+                        el.style.setProperty('--animation-delay', `${index * 100}ms`);
+                    }
+                });
+            }
 
             if (pageId === 'home') {
                 startSlideshow(); 
@@ -922,11 +965,6 @@
             }
         });
 
-        /**
-         * Creates a fallback text element for a slideshow item if the image fails to load.
-         * @param {object} slideData - Data for the slide (text, color).
-         * @returns {HTMLDivElement} The fallback div element.
-         */
         function createTextFallbackSlide(slideData) {
             const fallbackDiv = document.createElement('div');
             fallbackDiv.className = 'slide-text-fallback';
@@ -937,58 +975,43 @@
                 </svg>
             `;
             const textElement = document.createElement('p');
-            textElement.textContent = slideData.text || "ছবি উপলব্ধ নেই"; 
+            textElement.textContent = slideData.text; 
             fallbackDiv.innerHTML = svgIcon;
             fallbackDiv.appendChild(textElement);
             return fallbackDiv;
         }
 
-        /**
-         * Initializes the image slideshow DOM elements.
-         */
         function initSlideshow() {
             if (!slideshowContainer) return;
             slideshowContainer.innerHTML = ''; 
-
             if (slideshowImageSources.length === 0) {
                 stopSlideshow(); 
-                const fallbackDiv = createTextFallbackSlide({ text: "Slideshow unavailable" });
-                slideshowContainer.appendChild(fallbackDiv);
+                slideshowContainer.appendChild(createTextFallbackSlide({ text: "Slideshow unavailable" }));
                 return;
             }
 
             slideshowImageSources.forEach((slideData) => {
                 const slideItemContainer = document.createElement('div');
                 slideItemContainer.className = 'slide-item';
-
                 const img = document.createElement('img');
                 img.alt = slideData.text;
 
-                const attemptLoadImage = (primaryUrl, isOnlineAttempt, fallbackUrl) => {
-                    const urlToLoad = isOnlineAttempt ? `${primaryUrl}?t=${new Date().getTime()}` : primaryUrl;
-                    img.src = urlToLoad;
-
-                    img.onerror = function() {
-                        if (isOnlineAttempt && fallbackUrl) { 
-                            console.warn(`Online slideshow image failed: ${urlToLoad}. Trying local: ${fallbackUrl}`);
-                            img.onerror = function() { 
-                                console.warn(`Local slideshow image also failed: ${fallbackUrl}. Showing text fallback.`);
-                                slideItemContainer.innerHTML = ''; 
-                                slideItemContainer.appendChild(createTextFallbackSlide(slideData));
-                            };
-                            img.src = fallbackUrl; 
-                        } else { 
-                            console.warn(`Slideshow image (local or fallback) failed: ${urlToLoad}. Showing text fallback.`);
-                            slideItemContainer.innerHTML = ''; 
+                const attemptLoadImage = (primaryUrl, fallbackUrl) => {
+                    img.src = primaryUrl;
+                    img.onerror = () => {
+                        if (fallbackUrl) {
+                            img.src = fallbackUrl;
+                            img.onerror = () => slideItemContainer.appendChild(createTextFallbackSlide(slideData));
+                        } else {
                             slideItemContainer.appendChild(createTextFallbackSlide(slideData));
                         }
                     };
                 };
 
                 if (navigator.onLine) {
-                    attemptLoadImage(slideData.onlineUrl, true, slideData.localUrl);
+                    attemptLoadImage(slideData.onlineUrl, slideData.localUrl);
                 } else {
-                    attemptLoadImage(slideData.localUrl, false, null); 
+                    attemptLoadImage(slideData.localUrl, null);
                 }
 
                 slideItemContainer.appendChild(img);
@@ -997,11 +1020,8 @@
 
             const slidesInDom = slideshowContainer.querySelectorAll('.slide-item');
             if (slidesInDom.length > 0) {
-                slidesInDom.forEach(s => s.classList.remove('active')); 
-                slidesInDom[0].classList.add('active'); 
-                currentSlideIndex = 0; 
-            } else {
-                currentSlideIndex = 0; 
+                slidesInDom[0].classList.add('active');
+                currentSlideIndex = 0;
             }
         }
         
@@ -1017,9 +1037,7 @@
         function startSlideshow() {
             stopSlideshow();    
             initSlideshow();    
-
-            const slidesInDom = slideshowContainer.querySelectorAll('.slide-item');
-            if (slidesInDom.length > 1) {
+            if (slideshowContainer.querySelectorAll('.slide-item').length > 1) {
                 slideshowInterval = setInterval(nextSlide, 5000); 
             }
         }
@@ -1032,57 +1050,52 @@
             const pageElement = document.getElementById(pageContainerId);
             if (!pageElement) return;
 
-            const existingMessage = pageElement.querySelector('.offline-data-message');
-            if (existingMessage) existingMessage.remove(); 
+            let existingMessage = pageElement.querySelector('.offline-data-message');
+            if (!existingMessage) {
+                existingMessage = document.createElement('div');
+                existingMessage.className = 'offline-data-message';
+                pageElement.insertBefore(existingMessage, pageElement.firstChild);
+            }
             
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'offline-data-message';
             const lastFetchTimestamp = localStorage.getItem(LAST_FETCH_TIMESTAMP_KEY);
-            let messageText = "⚠️ আপনি অফলাইন ডেটা দেখছেন। এটি সর্বশেষ তথ্য নাও হতে পারে।"; 
+            let messageText = translations[currentLang].offlineDataWarning;
             if (lastFetchTimestamp) {
                 try {
                     const date = new Date(lastFetchTimestamp);
-                    const formattedDate = date.toLocaleString('bn-BD', { 
+                    const formattedDate = date.toLocaleString(currentLang === 'bn' ? 'bn-BD' : 'en-US', { 
                         year: 'numeric', month: 'long', day: 'numeric', 
                         hour: 'numeric', minute: '2-digit', hour12: true 
                     });
-                    messageText += ` সর্বশেষ আপডেট: ${formattedDate}`; 
+                    messageText += ` ${translations[currentLang].lastUpdated.replace('{date}', formattedDate)}`;
                 } catch (e) {
                     console.warn("Could not parse last fetch timestamp:", e);
                 }
             }
-            messageDiv.textContent = messageText;
-            pageElement.insertBefore(messageDiv, pageElement.firstChild); 
+            existingMessage.textContent = messageText;
         }
 
         function loadDataFromCache(isBackgroundFetch, onlineErrorMsg = null) {
             const cachedData = localStorage.getItem(LOCAL_STORAGE_KEY);
             if (cachedData) {
-                console.log("Data loaded from localStorage.");
                 allDonors = JSON.parse(cachedData);
                 calculateBloodGroupCounts();
-                if (!isBackgroundFetch) { 
+                if (!isBackgroundFetch) {
                     renderBloodGroupCards();
                     populateLocationFilter(); 
                     showOfflineDataMessage('selectBloodGroupPage');
                 }
                 if (onlineErrorMsg && !isBackgroundFetch) {
-                    errorMessagePage2.textContent = `সর্বশেষ ডেটা আনতে সমস্যা হয়েছে (${onlineErrorMsg})। সংরক্ষিত ডেটা দেখানো হচ্ছে।`; 
+                    errorMessagePage2.textContent = `${translations[currentLang].dataFetchError} (${onlineErrorMsg})`; 
                     errorMessagePage2.classList.remove('hidden');
                 }
                 return true;
             } else {
-                console.log("No cached data found.");
                 allDonors = []; 
                 calculateBloodGroupCounts(); 
                 if (!isBackgroundFetch) {
                     renderBloodGroupCards(); 
                     populateLocationFilter(); 
-                    if (onlineErrorMsg) {
-                        errorMessagePage2.textContent = `সর্বশেষ ডেটা আনতে সমস্যা হয়েছে (${onlineErrorMsg}) এবং কোনো সংরক্ষিত ডেটা নেই।`; 
-                    } else {
-                        errorMessagePage2.textContent = "আপনি অফলাইনে আছেন এবং কোনো সংরক্ষিত ডেটা নেই। অনুগ্রহ করে ইন্টারনেট সংযোগ করুন।"; 
-                    }
+                    errorMessagePage2.textContent = translations[currentLang].dataFetchError;
                     errorMessagePage2.classList.remove('hidden');
                 }
                 initialDataFetchFailed = true; 
@@ -1094,15 +1107,11 @@
             if (!isBackgroundFetch) { 
                 loadingSpinnerPage2.style.display = 'block';
                 errorMessagePage2.classList.add('hidden');
-                noResultsMessage.classList.add('hidden');
-                const existingOfflineMsg = pages.selectBloodGroup.querySelector('.offline-data-message');
-                if (existingOfflineMsg) existingOfflineMsg.remove();
             }
             initialDataFetchFailed = false; 
 
             if (navigator.onLine) { 
                 try {
-                    console.log("Online: Fetching fresh data...");
                     const response = await fetch(`${googleSheetCsvUrl}&t=${new Date().getTime()}`);
                     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                     const csvText = await response.text();
@@ -1111,45 +1120,32 @@
                     try {
                         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(allDonors));
                         localStorage.setItem(LAST_FETCH_TIMESTAMP_KEY, new Date().toISOString());
-                        console.log("Data saved to localStorage.");
                     } catch (e) {
                         console.warn("Could not save data to localStorage:", e);
-                        if (!isBackgroundFetch) showToast("Offline data could not be saved.", true);
                     }
 
                     calculateBloodGroupCounts();
-                    if (!isBackgroundFetch) { 
+                    if (!isBackgroundFetch) {
                         renderBloodGroupCards();
                         populateLocationFilter(); 
-                        if (allDonors.length === 0 && (!csvText || !csvText.includes(','))) {
-                             errorMessagePage2.textContent = "No donor data found in the sheet.";
-                             errorMessagePage2.classList.remove('hidden');
-                        }
                     }
                     return true;
                 } catch (error) {
-                    console.error('Online Fetch Error:', error);
                     initialDataFetchFailed = true; 
                     return loadDataFromCache(isBackgroundFetch, error.message);
                 } finally {
-                    if (!isBackgroundFetch) {
-                        loadingSpinnerPage2.style.display = 'none'; 
-                    }
+                    if (!isBackgroundFetch) loadingSpinnerPage2.style.display = 'none';
                 }
             } else { 
-                console.log("Offline: Attempting to load data from cache...");
-                if (!isBackgroundFetch) showToast("⚠️ You are offline. Showing cached data.", true);
+                if (!isBackgroundFetch) showToast(translations[currentLang].youAreOffline, true);
                 return loadDataFromCache(isBackgroundFetch); 
             }
         }
 
         async function initialBackgroundFetch() {
             if (navigator.onLine) {
-                console.log("Initial background fetch started...");
                 await fetchAndParseData(true); 
-                console.log("Initial background fetch completed.");
             } else {
-                console.log("Offline on initial load, attempting to load from cache for background.");
                 loadDataFromCache(true); 
             }
         }
@@ -1160,8 +1156,7 @@
             if (lines.length <= 1) return donors; 
 
             for (let i = 1; i < lines.length; i++) {
-                const line = lines[i];
-                const values = line.split(',').map(value => value.trim()); 
+                const values = lines[i].split(',').map(value => value.trim()); 
                 if (values.length >= 3) { 
                     donors.push({
                         name: values[0] || "N/A",
@@ -1187,19 +1182,20 @@
 
         function renderBloodGroupCards() {
             bloodGroupCardsContainer.innerHTML = ''; 
-            bloodGroups.forEach(bg => {
+            const donorText = translations[currentLang].bloodDonor;
+            const donorsText = translations[currentLang].bloodDonors;
+            bloodGroups.forEach((bg, index) => {
                 const count = bloodGroupCounts[bg] || 0;
                 const card = document.createElement('div');
-                card.className = 'blood-group-card';
+                card.className = 'blood-group-card animate-on-load';
+                card.style.setProperty('--animation-delay', `${index * 50}ms`);
                 card.dataset.bloodgroup = bg; 
                 card.innerHTML = `
                     <div class="blood-type">${bg}</div>
-                    <div class="donor-count">${count} Donor${count === 1 ? '' : 's'}</div>
+                    <div class="donor-count">${count} ${count === 1 ? donorText : donorsText}</div>
                 `;
                 card.addEventListener('click', (e) => {
-                    animateAndAct(e.currentTarget, () => { 
-                        handleBloodGroupCardClick(bg);
-                    });
+                    animateAndAct(e.currentTarget, () => handleBloodGroupCardClick(bg));
                 });
                 bloodGroupCardsContainer.appendChild(card);
             });
@@ -1207,33 +1203,27 @@
         
         function populateLocationFilter() {
             if (!locationFilterSelect) return;
+            const currentSelection = locationFilterSelect.value;
             locationFilterSelect.innerHTML = ''; 
             
             const allLocationsOption = document.createElement('option');
             allLocationsOption.value = 'all';
-            allLocationsOption.textContent = ' সকল এলাকা'; 
+            allLocationsOption.textContent = translations[currentLang].allAreas; 
             locationFilterSelect.appendChild(allLocationsOption);
             
-            if (allDonors && allDonors.length > 0) {
-                const uniqueLocations = [...new Set(allDonors.map(donor => donor.location).filter(loc => loc && loc !== "N/A"))].sort();
-                uniqueLocations.forEach(location => {
-                    const option = document.createElement('option');
-                    option.value = location;
-                    option.textContent = location;
-                    locationFilterSelect.appendChild(option);
-                });
-            }
-            if (locationFilterSelect.options.length <= 1) { 
-                locationFilterSelect.classList.add('no-icon');
-            } else {
-                locationFilterSelect.classList.remove('no-icon');
-            }
+            const uniqueLocations = [...new Set(allDonors.map(donor => donor.location).filter(loc => loc && loc !== "N/A"))].sort();
+            uniqueLocations.forEach(location => {
+                const option = document.createElement('option');
+                option.value = location;
+                option.textContent = location;
+                locationFilterSelect.appendChild(option);
+            });
+            locationFilterSelect.value = currentSelection;
+            locationFilterSelect.classList.toggle('no-icon', locationFilterSelect.options.length <= 1);
         }
 
         function handleBloodGroupCardClick(bloodGroup) {
-            currentSelectedBloodGroup = bloodGroup; 
-            if(headerTitle) headerTitle.textContent = `রক্তদাতা তালিকা (${bloodGroup})`; 
-            
+            currentSelectedBloodGroup = bloodGroup;
             populateLocationFilter(); 
             if(locationFilterSelect) locationFilterSelect.value = 'all'; 
             
@@ -1242,46 +1232,21 @@
         }
 
         function isDonorAvailable(lastDonatedDateStr) {
-            if (!lastDonatedDateStr) {
-                return true; 
-            }
+            if (!lastDonatedDateStr) return true;
             try {
                 let parts = lastDonatedDateStr.split('/'); 
-                let lastDonatedDate;
-                if (parts.length === 3) {
-                    lastDonatedDate = new Date(parts[2], parts[0] - 1, parts[1]); 
-                } else {
-                    parts = lastDonatedDateStr.split('-'); 
-                    if (parts.length === 3) {
-                        lastDonatedDate = new Date(parts[0], parts[1] - 1, parts[2]); 
-                    } else {
-                        lastDonatedDate = new Date(lastDonatedDateStr);
-                    }
-                }
-
-                if (isNaN(lastDonatedDate.getTime())) { 
-                    console.warn("Invalid date format for:", lastDonatedDateStr, "Treating as available.");
-                    return true; 
-                }
-
-                const currentDate = new Date();
+                let lastDonatedDate = parts.length === 3 ? new Date(parts[2], parts[0] - 1, parts[1]) : new Date(lastDonatedDateStr);
+                if (isNaN(lastDonatedDate.getTime())) return true;
                 const threeMonthsAgo = new Date();
-                threeMonthsAgo.setMonth(currentDate.getMonth() - 3); 
+                threeMonthsAgo.setMonth(new Date().getMonth() - 3); 
                 return lastDonatedDate <= threeMonthsAgo; 
             } catch (e) {
-                console.error("Error parsing date:", lastDonatedDateStr, e);
                 return true; 
             }
         }
 
         function showContactActionModal(contactNumber) {
             currentContactForModal = contactNumber; 
-            // Update the modal title text content
-            const modalTitleElement = contactActionModal.querySelector('h3');
-            if (modalTitleElement) {
-                modalTitleElement.textContent = 'ফোন নম্বর'; // "Phone Number" in Bengali
-            }
-
             if(contactActionNumber) contactActionNumber.textContent = contactNumber;
             if(contactActionModal) contactActionModal.classList.add('active'); 
         }
@@ -1291,62 +1256,20 @@
             currentContactForModal = null; 
         }
         
-        /**
-         * Shows the developer information modal and attempts to load the developer image
-         * with online/offline fallbacks.
-         */
         function showDeveloperInfoModal() {
+            if (!developerInfoModal) return;
             const developerModalImageEl = document.getElementById('developerModalImage');
-            // The developerInfoModal (overlay) is a global const already defined
-
-            if (!developerModalImageEl) {
-                // If the image element itself is missing, still show the modal text content
-                if(developerInfoModal) developerInfoModal.classList.add('active');
-                console.warn("Developer image element not found.");
-                return;
-            }
-
             const onlineDevImageUrl = 'https://raw.githubusercontent.com/sohag525/Blood1/main/image4.jpg';
             const localDevImageUrl = 'images/developer.jpg';
             
-            const attemptLoadDevImage = (primarySrc, fallbackSrcIfPrimaryFails) => {
-                // Resetting onerror before each attempt to ensure the correct fallback sequence
-                developerModalImageEl.onerror = null; 
-                developerModalImageEl.src = primarySrc; 
-
-                developerModalImageEl.onerror = () => { 
-                    if (fallbackSrcIfPrimaryFails) {
-                        console.warn(`Developer image failed for ${primarySrc}. Trying fallback: ${fallbackSrcIfPrimaryFails}.`);
-                        // Set a new onerror for the fallback attempt to revert to placeholder if it also fails
-                        developerModalImageEl.onerror = function() {
-                             console.warn(`Developer fallback image also failed: ${fallbackSrcIfPrimaryFails}. HTML onerror for placeholder should take over.`);
-                             // Explicitly set to placeholder if you want to be sure, or let the original HTML onerror handle it.
-                             // For safety, we can revert to the original HTML-defined placeholder logic by setting src to something invalid again
-                             // or directly to the placeholder if the HTML onerror is complex/removed.
-                             // However, the original HTML 'onerror' should handle this if we just clear this JS handler.
-                             this.src = 'https://placehold.co/100x100/cccccc/ffffff?text=Photo';
-                             this.alt = 'Developer photo not available';
-                             this.onerror = null; // Prevent infinite loops if placeholder also fails
-                        };
-                        developerModalImageEl.src = fallbackSrcIfPrimaryFails; 
-                    } else {
-                        console.warn(`Developer image failed for ${primarySrc} (no further JS fallback). HTML onerror for placeholder should take over.`);
-                         developerModalImageEl.src = 'https://placehold.co/100x100/cccccc/ffffff?text=Photo';
-                         developerModalImageEl.alt = 'Developer photo not available';
-                         developerModalImageEl.onerror = null; 
-                    }
-                };
+            const attemptLoadDevImage = (primarySrc, fallbackSrc) => {
+                developerModalImageEl.src = primarySrc;
+                developerModalImageEl.onerror = () => { if (fallbackSrc) developerModalImageEl.src = fallbackSrc; };
             };
-
-            if (navigator.onLine) {
-                console.log('Online: Attempting to load online developer image.');
-                attemptLoadDevImage(onlineDevImageUrl + '?t=' + new Date().getTime(), localDevImageUrl);
-            } else {
-                console.log('Offline: Attempting to load local developer image.');
-                attemptLoadDevImage(localDevImageUrl, null); // No JS fallback, HTML onerror is the final resort
-            }
-
-            if(developerInfoModal) developerInfoModal.classList.add('active'); 
+            if (navigator.onLine) attemptLoadDevImage(onlineDevImageUrl, localDevImageUrl);
+            else attemptLoadDevImage(localDevImageUrl, 'https://placehold.co/100x100/cccccc/ffffff?text=Photo');
+            
+            developerInfoModal.classList.add('active'); 
         }
 
 
@@ -1361,9 +1284,8 @@
             if(errorMessageResults) errorMessageResults.classList.add('hidden'); 
             
             const resultsPageElement = document.getElementById('resultsPage');
-            if (resultsPageElement) {
-                const existingOfflineMsg = resultsPageElement.querySelector('.offline-data-message');
-                if (existingOfflineMsg) existingOfflineMsg.remove();
+            if (resultsPageElement.querySelector('.offline-data-message')) {
+                resultsPageElement.querySelector('.offline-data-message').remove();
             }
 
             if (!navigator.onLine && localStorage.getItem(LOCAL_STORAGE_KEY)) {
@@ -1372,54 +1294,38 @@
 
             if (initialDataFetchFailed && allDonors.length === 0) {
                 if(errorMessageResults) {
-                    errorMessageResults.textContent = "Failed to load donor data. Please check your connection.";
+                    errorMessageResults.textContent = translations[currentLang].dataFetchError;
                     errorMessageResults.classList.remove('hidden');
                 }
-                if(donorsListContainer) donorsListContainer.innerHTML = ''; 
                 if(loadingSpinnerResults) loadingSpinnerResults.style.display = 'none';
                 return;
             }
 
-            let filteredByBloodGroup = allDonors.filter(donor => donor.bloodGroup === selectedGroup);
+            let finalFilteredDonors = allDonors.filter(donor => donor.bloodGroup === selectedGroup && (selectedLocation === 'all' || donor.location === selectedLocation));
             
-            let finalFilteredDonors = filteredByBloodGroup;
-            if (selectedLocation !== 'all') {
-                finalFilteredDonors = filteredByBloodGroup.filter(donor => donor.location === selectedLocation);
-            }
-            
-            finalFilteredDonors.forEach(donor => {
-                donor.isAvailable = isDonorAvailable(donor.lastDonatedDate);
-            });
-
+            finalFilteredDonors.forEach(donor => donor.isAvailable = isDonorAvailable(donor.lastDonatedDate));
             if(totalDonorsCountEl) totalDonorsCountEl.textContent = finalFilteredDonors.length; 
             if(availableDonorsCountEl) availableDonorsCountEl.textContent = finalFilteredDonors.filter(d => d.isAvailable).length;
-
-            finalFilteredDonors.sort((a, b) => {
-                if (a.isAvailable !== b.isAvailable) {
-                    return a.isAvailable ? -1 : 1; 
-                }
-                return a.name.localeCompare(b.name); 
-            });
+            finalFilteredDonors.sort((a, b) => (b.isAvailable - a.isAvailable) || a.name.localeCompare(b.name));
 
             if (finalFilteredDonors.length === 0) {
                 if(noResultsMessage) {
-                    noResultsMessage.textContent = `No donors found for ${selectedGroup} in ${selectedLocation === 'all' ? 'any location' : selectedLocation}.`;
+                    noResultsMessage.textContent = translations[currentLang].noDonorsFound
+                        .replace('{group}', selectedGroup)
+                        .replace('{location}', selectedLocation === 'all' ? translations[currentLang].allAreas : selectedLocation);
                     noResultsMessage.classList.remove('hidden');
                 }
             } else {
-                finalFilteredDonors.forEach(donor => {
+                finalFilteredDonors.forEach((donor, index) => {
                     const card = document.createElement('div');
-                    card.className = 'donor-card';
-
-                    const contactButtonClass = donor.isAvailable ? 'available' : 'unavailable';
-                    const bloodGroupPillClass = donor.isAvailable ? 'available' : 'unavailable'; 
-                    const displayContact = donor.contact && !donor.contact.startsWith('0') && /^\d{10}$/.test(donor.contact) ? '0' + donor.contact : donor.contact;
+                    card.className = 'donor-card animate-on-load';
+                    card.style.setProperty('--animation-delay', `${index * 100}ms`);
 
                     card.innerHTML = `
                         <div class="donor-card-header">
                             <h4 class="donor-name">${donor.name}</h4>
                             <div class="flex items-center">
-                                <span class="donor-blood-group ${bloodGroupPillClass}">${donor.bloodGroup}</span>
+                                <span class="donor-blood-group ${donor.isAvailable ? 'available' : 'unavailable'}">${donor.bloodGroup}</span>
                             </div>
                         </div>
                         <div class="donor-details">
@@ -1428,18 +1334,15 @@
                                 ${donor.location || 'N/A'}
                             </p>
                         </div>
-                        <button class="contact-donor-button ${contactButtonClass}">
+                        <button class="contact-donor-button ${donor.isAvailable ? 'available' : 'unavailable'}">
                              <img src="images/telephone.png" alt="Call" class="w-5 h-5 mr-2" onerror="this.style.display='none'"> 
-                            যোগাযোগ করুন 
+                            <span data-lang-key="contact">${translations[currentLang].contact}</span> 
                         </button>
                     `;
-                    const contactButton = card.querySelector('.contact-donor-button');
-                    contactButton.addEventListener('click', (e) => {
-                        animateAndAct(e.currentTarget, () => { 
-                            showContactActionModal(displayContact);
-                        });
+                    card.querySelector('.contact-donor-button').addEventListener('click', (e) => {
+                        animateAndAct(e.currentTarget, () => showContactActionModal(donor.contact));
                     });
-                    if(donorsListContainer) donorsListContainer.appendChild(card);
+                    donorsListContainer.appendChild(card);
                 });
             }
             if(loadingSpinnerResults) loadingSpinnerResults.style.display = 'none'; 
@@ -1447,62 +1350,72 @@
         
         function showToast(message, isWarning = false) {
             toastMessage.textContent = message;
-            if (isWarning) {
-                toastMessage.classList.add('warning');
-            } else {
-                toastMessage.classList.remove('warning');
-            }
-            toastMessage.classList.add('show'); 
+            toastMessage.classList.add('show');
             clearTimeout(toastTimeout); 
-            toastTimeout = setTimeout(() => {
-                toastMessage.classList.remove('show');
-                toastMessage.classList.remove('warning'); 
-            }, 3000); 
+            toastTimeout = setTimeout(() => toastMessage.classList.remove('show'), 3000); 
         }
 
          function copyToClipboard(text) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            textarea.style.position = 'fixed'; textarea.style.left = '-9999px'; textarea.style.top = '-9999px'; textarea.style.opacity = 0;
-            document.body.appendChild(textarea);
-            textarea.focus(); textarea.select(); 
-            try {
-                if (document.execCommand('copy')) { 
-                    showToast(`কপি করা হয়েছে: ${text}`); 
-                } else {
-                    showToast('কপি করতে সমস্যা হয়েছে।', true); 
-                }
-            } catch (err) {
-                console.error('Clipboard copy error:', err);
-                showToast('কপি করতে সমস্যা হয়েছে।', true);
-            }
-            document.body.removeChild(textarea); 
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(translations[currentLang].copied.replace('{text}', text));
+            }).catch(() => {
+                showToast(translations[currentLang].copyError, true);
+            });
+        }
+
+        function populateFaq() {
+            const faqContainer = document.getElementById('faqContent');
+            faqContainer.innerHTML = '';
+            translations[currentLang].faq.forEach(item => {
+                const faqItem = document.createElement('div');
+                faqItem.className = 'faq-item';
+                faqItem.innerHTML = `
+                    <div class="faq-question-header">
+                        <span class="faq-question-text">${item.q}</span>
+                        <svg class="faq-toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div class="faq-answer"><p>${item.a}</p></div>
+                `;
+                faqContainer.appendChild(faqItem);
+            });
+            initializeFaqAccordion();
         }
 
         function initializeFaqAccordion() {
-            const faqItems = document.querySelectorAll('#faqContent .faq-question-header');
-            faqItems.forEach(header => {
+            document.querySelectorAll('#faqContent .faq-question-header').forEach(header => {
                 header.addEventListener('click', () => {
                     const answer = header.nextElementSibling; 
                     const icon = header.querySelector('.faq-toggle-icon'); 
-                    
-                    faqItems.forEach(otherHeader => {
-                        if (otherHeader !== header) { 
-                            const otherAnswer = otherHeader.nextElementSibling;
-                            const otherIcon = otherHeader.querySelector('.faq-toggle-icon');
-                            if (otherAnswer.classList.contains('active')) {
-                                otherAnswer.classList.remove('active');
-                                otherIcon.classList.remove('active');
-                            }
-                        }
-                    });
                     answer.classList.toggle('active');
                     icon.classList.toggle('active');
                 });
             });
         }
 
+        function toggleLanguageModal() {
+            const languageModal = document.getElementById('languageModal');
+            languageModal.classList.toggle('active');
+        }
+
         // --- EVENT LISTENERS ---
+        hamburgerButton.addEventListener('click', toggleLanguageModal);
+        
+        document.querySelectorAll('#languageModal .lang-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const lang = button.dataset.lang;
+                if (lang !== currentLang) {
+                    setLanguage(lang);
+                    showToast(translations[lang].languageChanged);
+                }
+                toggleLanguageModal();
+            });
+        });
+        
+        document.getElementById('languageModal').addEventListener('click', (e) => {
+             if (e.target.id === 'languageModal') {
+                toggleLanguageModal();
+             }
+        });
 
         findDonorButton.addEventListener('click', (e) => {
             animateAndAct(e.currentTarget, async () => {
@@ -1514,64 +1427,33 @@
         becomeDonorAppButton.addEventListener('click', () => window.open(googleFormLink, '_blank'));
         
         floatingFaqButton.addEventListener('click', (e) => {
-            animateAndAct(e.currentTarget, () => {
-                showPage('faq');
-            });
+            animateAndAct(e.currentTarget, () => showPage('faq'));
         });
+
 
         headerBackButton.addEventListener('click', (e) => {
-            animateAndAct(e.currentTarget, () => {
-                if (history.state && history.state.appState) { 
-                    history.back(); 
-                } else {
-                    showPage('home'); 
-                }
-            });
-        });
-
-        hamburgerButton.addEventListener('click', (e) => {
-             animateAndAct(e.currentTarget, () => {
-                showPage('home'); 
-            });
+            animateAndAct(e.currentTarget, () => history.back());
         });
         
         developerInfoButton.addEventListener('click', (e) => {
-            animateAndAct(e.currentTarget, () => {
-                 showDeveloperInfoModal(); 
-            });
+            animateAndAct(e.currentTarget, showDeveloperInfoModal);
         });
         
         window.addEventListener('online', async () => {
             if(currentPageId === 'home') startSlideshow(); 
-            showToast("আপনি এখন অনলাইনে আছেন! ডেটা আপডেট করা হচ্ছে...", false); 
-            const dataRefreshed = await fetchAndParseData(true); 
-            if (dataRefreshed) {
-                populateLocationFilter(); 
-                if (currentPageId === 'selectBloodGroup') { 
-                    const existingOfflineMsg = pages.selectBloodGroup.querySelector('.offline-data-message');
-                    if (existingOfflineMsg) existingOfflineMsg.remove();
-                    renderBloodGroupCards(); 
-                } else if (currentPageId === 'results' && currentSelectedBloodGroup) { 
-                    const existingOfflineMsg = pages.results.querySelector('.offline-data-message');
-                    if (existingOfflineMsg) existingOfflineMsg.remove();
-                    displayDonorsForGroup(currentSelectedBloodGroup, locationFilterSelect.value); 
-                }
-            }
-            if (developerInfoModal && developerInfoModal.classList.contains('active')) {
-                 showDeveloperInfoModal();
+            showToast(translations[currentLang].youAreOnline); 
+            const refreshed = await fetchAndParseData(true); 
+            if (refreshed && (currentPageId === 'selectBloodGroup' || currentPageId === 'results')) {
+                setLanguage(currentLang);
             }
         });
+
         window.addEventListener('offline', () => {
              if(currentPageId === 'home') startSlideshow(); 
-             showToast("⚠️ আপনি এখন অফলাইনে আছেন। সংরক্ষিত ডেটা দেখানো হচ্ছে।", true); 
-             if (currentPageId === 'selectBloodGroup' && localStorage.getItem(LOCAL_STORAGE_KEY)) { 
-                showOfflineDataMessage('selectBloodGroupPage');
-             } else if (currentPageId === 'results' && localStorage.getItem(LOCAL_STORAGE_KEY)) { 
-                showOfflineDataMessage('resultsPage');
+             showToast(translations[currentLang].youAreOffline, true); 
+             if (currentPageId === 'selectBloodGroup' || currentPageId === 'results') {
+                showOfflineDataMessage(currentPageId + 'Page');
              }
-             if (developerInfoModal && developerInfoModal.classList.contains('active')) {
-                 showDeveloperInfoModal();
-            }
         });
 
         if (locationFilterSelect) {
@@ -1583,43 +1465,96 @@
         }
 
         contactActionCallButton.addEventListener('click', () => {
-            if (currentContactForModal) {
-                window.location.href = `tel:${currentContactForModal}`; 
-            }
+            if (currentContactForModal) window.location.href = `tel:${currentContactForModal}`; 
             hideContactActionModal();
         });
 
         contactActionCopyButton.addEventListener('click', () => {
-            if (currentContactForModal) {
-                copyToClipboard(currentContactForModal); 
-            }
+            if (currentContactForModal) copyToClipboard(currentContactForModal); 
             hideContactActionModal();
         });
 
         contactActionCloseButton.addEventListener('click', hideContactActionModal);
-
-        contactActionModal.addEventListener('click', (event) => {
-            if (event.target === contactActionModal) { 
-                hideContactActionModal();
-            }
+        contactActionModal.addEventListener('click', (e) => {
+            if (e.target === contactActionModal) hideContactActionModal();
         });
 
         developerInfoCloseButton.addEventListener('click', hideDeveloperInfoModal);
-        developerInfoModal.addEventListener('click', (event) => {
-            if (event.target === developerInfoModal) {
-                hideDeveloperInfoModal();
-            }
+        developerInfoModal.addEventListener('click', (e) => {
+            if (e.target === developerInfoModal) hideDeveloperInfoModal();
         });
 
-        // --- INITIALIZATION ---
+        // --- INITIALIZATION & SERVICE WORKER ---
         document.addEventListener('DOMContentLoaded', () => {
-            initializeFaqAccordion(); 
-            history.replaceState({ pageId: 'home', appState: true }, '', '#home');
+            // Service Worker Registration
+            if ('serviceWorker' in navigator) {
+                const swCode = `
+                    const CACHE_NAME = 'blood-donor-cache-v1';
+                    const urlsToCache = [
+                        '/',
+                        'https://cdn.tailwindcss.com',
+                        'https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap',
+                        'images/image1.jpg',
+                        'images/image2.jpg',
+                        'images/image3.jpg',
+                        'images/location.png',
+                        'images/telephone.png',
+                        'images/developer.jpg',
+                        'images/whatsapp.png',
+                        'images/facebook.png'
+                    ];
 
+                    self.addEventListener('install', event => {
+                        event.waitUntil(
+                            caches.open(CACHE_NAME)
+                                .then(cache => {
+                                    console.log('Opened cache');
+                                    return cache.addAll(urlsToCache);
+                                })
+                        );
+                    });
+
+                    self.addEventListener('fetch', event => {
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then(response => {
+                                    if (response) {
+                                        return response;
+                                    }
+                                    return fetch(event.request).then(
+                                        (response) => {
+                                            if(!response || response.status !== 200 || response.type !== 'basic') {
+                                                return response;
+                                            }
+                                            const responseToCache = response.clone();
+                                            caches.open(CACHE_NAME)
+                                                .then(cache => {
+                                                    cache.put(event.request, responseToCache);
+                                                });
+                                            return response;
+                                        }
+                                    );
+                                })
+                        );
+                    });
+                `;
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+
+                navigator.serviceWorker.register(swUrl)
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            }
+
+
+            setLanguage(currentLang);
+            history.replaceState({ pageId: 'home', appState: true }, '', '#home');
             initialBackgroundFetch().then(() => {
-                if (currentPageId === 'results' || allDonors.length > 0) { 
-                     populateLocationFilter();
-                }
+                if (currentPageId === 'results') populateLocationFilter();
             }); 
             showPage('home'); 
         });
